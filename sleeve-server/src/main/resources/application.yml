@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+
+
+sleeve:
+  api-package: com.quan.windsleeve.api
