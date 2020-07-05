@@ -3,6 +3,11 @@ spring:
     active: dev
   jpa:
     hibernate:
+  jackson:
+    time-zone: GMT+8 #jackson默认的时区比本地时区少8个小时，需要重新设置
+    property-naming-strategy: SNAKE_CASE #将属性名设置为下划线的形式
+    serialization:
+      write-dates-as-timestamps: true #配置以时间戳的形式序列化返回时间
 
 
 sleeve:

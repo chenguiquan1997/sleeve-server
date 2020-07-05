@@ -21,8 +21,8 @@ import javax.validation.constraints.NotNull;
 @PasswordEquals
 public class PersonDTO {
 
-    @NotNull(message = "用户名不能为空!!!")
-    @Length
+    @NotNull(message = "用户名不能为空")
+    @Length(min = 5,max = 12)
     private String name;
 
     @Range(min=1,max = 100)

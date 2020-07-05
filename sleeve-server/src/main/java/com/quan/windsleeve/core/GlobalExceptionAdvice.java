@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
-//@ControllerAdvice//声明当前类是全局异常处理类
+@ControllerAdvice//声明当前类是全局异常处理类
 public class GlobalExceptionAdvice {
 
     @Autowired
@@ -84,7 +84,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(code= HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public UnifyResponse handleConstraintException(HttpServletRequest req, ConstraintViolationException e){
+    public UnifyResponse handlerConstraintException(HttpServletRequest req, ConstraintViolationException e){
         String requestUrl = req.getRequestURI();
         String method = req.getMethod();
         String message = e.getMessage();

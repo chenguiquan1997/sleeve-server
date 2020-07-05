@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class TestController {
 //    }
     @PostMapping("/hello/{id}")
     @ResponseBody
-    public String hello(@PathVariable @Range(min = 1,max = 10) Integer id,
+    public String hello(@PathVariable  @Range(min = 1,max = 10) Integer id,
                         @RequestParam String name,
                         // @RequestBody Map<String,Object> person
                         @RequestBody @Validated PersonDTO personDTO) {
