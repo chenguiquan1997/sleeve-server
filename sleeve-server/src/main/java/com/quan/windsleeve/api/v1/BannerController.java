@@ -1,5 +1,6 @@
 package com.quan.windsleeve.api.v1;
 
+import com.quan.windsleeve.exception.http.NotFoundException;
 import com.quan.windsleeve.model.Banner;
 import com.quan.windsleeve.service.IBannerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +15,20 @@ public class BannerController {
     @Autowired
     private IBannerService bannerService;
 
-    @GetMapping("/name/{id}")
+    @GetMapping("/name")
     @ResponseBody
-    public Banner getBannerById(@PathVariable @NotBlank Long id) {
-        System.out.println("我进来了");
-        /**
-         * jpa在这里属于懒加载，第一次查询时，它不会去查询与它相关联的集合数据，
-         * 在需要的时候，才会去进行二次查询关联数据
-         */
+    public Banner getBannerById(@RequestParam Long id) {
         Banner banner = bannerService.findOneById(id);
+        return banner;
+    }
+
+    @GetMapping("/name/{name}")
+    @ResponseBody
+    public Banner findOneByName(@PathVariable String name) {
+        Banner banner = bannerService.findOneByName(name);
+        if (banner == null) {
+            throw new NotFoundException(20001);
+        }
         return banner;
     }
 }

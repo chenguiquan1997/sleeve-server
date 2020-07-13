@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
-@ControllerAdvice//声明当前类是全局异常处理类
+//@ControllerAdvice//声明当前类是全局异常处理类
 public class GlobalExceptionAdvice {
 
     @Autowired
@@ -41,7 +41,7 @@ public class GlobalExceptionAdvice {
          * 如果不在Unify类中添加Getter()；那么message对象在返回到前端数据时，就得不到需要序列化的
          * 对象，所以就会报错
          */
-        UnifyResponse message = new UnifyResponse(9999,"服务器异常",method+" "+uri);
+        UnifyResponse message = new UnifyResponse(99999,"服务器异常",method+" "+uri);
         return message;
     }
 

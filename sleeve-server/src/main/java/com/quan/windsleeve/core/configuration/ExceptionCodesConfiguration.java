@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 //当前注解表示可以读取到的配置文件，让配置文件与当前类相对应
-@PropertySource(value = "classpath:config/exception-code.properties")
+@PropertySource(value = "classpath:config/exception-code.properties",encoding = "utf-8")
 //该注解表示当前类与配置文件的哪一个前缀相匹配，然后codes会自动匹配前缀后面的
-@ConfigurationProperties(prefix = "lin")
+@ConfigurationProperties(prefix = "sleeve")
 //如果想让当前类与配置文件相对应，那么当前类必须被IOC容器所管理
 @Component
 public class ExceptionCodesConfiguration {
@@ -36,7 +36,7 @@ public class ExceptionCodesConfiguration {
      */
     public String getMessage(int code) {
         String message = codes.get(code);
-        System.out.println("查找到的message : "+message);
+        //System.out.println("查找到的message : "+message);
         return message;
     }
 }

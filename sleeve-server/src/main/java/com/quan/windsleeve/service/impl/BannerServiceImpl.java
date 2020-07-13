@@ -16,4 +16,9 @@ public class BannerServiceImpl implements IBannerService {
     public Banner findOneById(Long id) {
         return bannerRepository.findOneById(id);
     }
+
+    @Override
+    public Banner findOneByName(String name) {
+        return bannerRepository.findOneByName(name);
+    }
 }
