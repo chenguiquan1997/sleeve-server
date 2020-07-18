@@ -43,6 +43,7 @@ public class SpuController {
         }
         return spuDetail;
     }
+
     @GetMapping("id/{id}/detail/vo")
     public SpuSimplifyVO getSpuByVO(@PathVariable @Positive Long id) {
         Spu spu = spuService.findSpuDetailById(id);
@@ -53,6 +54,13 @@ public class SpuController {
         BeanUtils.copyProperties(spu,spuSimplifyVO);
         return spuSimplifyVO;
     }
+
+    /**
+     *获取spu瀑布流数据
+     * @param start 从第几位开始查询
+     * @param count 每次查询的数量
+     * @return
+     */
     // /latest?start=xxx&count=xx
     @GetMapping("/latest")
     public PagingMappering getSpuPageList(@RequestParam(defaultValue = "0") Integer start,
@@ -61,11 +69,17 @@ public class SpuController {
         PageCounter pageCounter = CommonUtils.PageCounterConvert(start,count);
         Page<Spu> spuPage = spuService.findSpuPageList(pageCounter.getPageNum(),pageCounter.getPageSize());
         if(spuPage == null) {
-            return null;
+            throw new NotFoundException(60001);
         }
         return new PagingMappering(spuPage,SpuSimplifyVO.class);
     }
 
+    /**
+     * 不使用封装，测试接口
+     * @param start
+     * @param count
+     * @return
+     */
     @GetMapping("/latest/test")
     public Paging getSpuPageListTest(@RequestParam(defaultValue = "0") Integer start,
                                           @RequestParam(defaultValue = "2") Integer count) {
@@ -89,6 +103,22 @@ public class SpuController {
         return paging;
     }
 
-
+    /**
+     * 根据 categoryId 对 spu 进行分页查询
+     * @param id
+     * @param isRoot
+     * @param start
+     * @param count
+     * @return
+     */
+    @GetMapping("/by/category/{id}")
+    public PagingMappering getSpuListByCategoryId(@PathVariable @Positive Integer id,
+                                       @RequestParam(defaultValue = "false") Boolean isRoot,
+                                       @RequestParam(defaultValue = "0") Integer start,
+                                       @RequestParam(defaultValue = "2") Integer count) {
+        PageCounter pageCounter = CommonUtils.PageCounterConvert(start,count);
+        Page<Spu> spuPage = spuService.findSpuListByCategoryId(pageCounter.getPageNum(),pageCounter.getPageSize(),id,isRoot);
+        return new PagingMappering(spuPage,SpuSimplifyVO.class);
+    }
 
 }

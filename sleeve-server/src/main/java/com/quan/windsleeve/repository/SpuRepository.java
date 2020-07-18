@@ -25,6 +25,20 @@ public interface SpuRepository extends JpaRepository<Spu,Long> {
     @Override
     Page<Spu> findAll(Pageable pageable);
 
+    /**
+     * 根据categoryId查询二级下面spu数据，并按照创建时间进行分页查询
+     * @param pageable
+     * @param categoryId
+     * @return
+     */
+    Page<Spu> findByCategoryIdOrderByCreateTimeDesc(Pageable pageable,Integer categoryId);
 
+    /**
+     *
+     * @param pageable
+     * @param rootCategoryId
+     * @return
+     */
+    Page<Spu> findByRootCategoryIdOrderByCreateTimeDesc(Pageable pageable, Integer rootCategoryId);
 
 }

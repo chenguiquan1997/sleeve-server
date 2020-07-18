@@ -8,9 +8,13 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category,Long> {
 
     /**
-     * 查询所有的一级分类商品
-     * @param rootId
+     * 根据isRoot查询不同级别的分类
+     * @param isRoot
      * @return
      */
-    List<Category> findByisRoot(Integer rootId);
+    List<Category> findByisRoot(Integer isRoot);
+
+
+
+
 }

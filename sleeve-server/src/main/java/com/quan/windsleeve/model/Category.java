@@ -18,8 +18,6 @@ public class Category extends BaseEntity{
     private Integer parentId;
     private String img;
     private Integer level;
-    private Integer index;
-
-
-
+    private Integer idx;
+    private String gridImg;
 }

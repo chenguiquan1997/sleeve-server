@@ -31,5 +31,14 @@ public class SpuServiceImpl implements ISpuService {
         return spuRepository.findAll(pageable);
     }
 
+    @Override
+    public Page<Spu> findSpuListByCategoryId(Integer pageNum, Integer pageSize, Integer categoryId, Boolean isRoot) {
+        Pageable pageable = PageRequest.of(pageNum,pageSize);
+        if(isRoot == true) {
+            return spuRepository.findByRootCategoryIdOrderByCreateTimeDesc(pageable,categoryId);
+        }
+        return spuRepository.findByCategoryIdOrderByCreateTimeDesc(pageable,categoryId);
+    }
+
 
 }

@@ -2,12 +2,16 @@ package com.quan.windsleeve.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+//加上了@Where注解之后，所有关于Spu实体类的操作，最后在sql语句中，都会加上这一句话
+@Where(clause = "delete_time is null and online = 1")
 public class Spu extends BaseEntity{
     @Id
     private Long id;
@@ -23,6 +27,8 @@ public class Spu extends BaseEntity{
     private Boolean isBest;
     private String spuThemeImg;
     private String forThemeImg;
+    private Integer categoryId;
+    private Integer rootCategoryId;
 
     @OneToMany
     @JoinColumn(name = "spuId")

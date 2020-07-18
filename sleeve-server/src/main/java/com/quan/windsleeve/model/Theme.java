@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -22,4 +23,8 @@ public class Theme extends BaseEntity{
     private Boolean online;
     private String extend;
 
+    @ManyToMany
+    @JoinTable(name = "theme_spu", joinColumns = @JoinColumn(name = "theme_id"),
+            inverseJoinColumns = @JoinColumn(name = "spu_id"))
+    private List<Spu> spuList;
 }
