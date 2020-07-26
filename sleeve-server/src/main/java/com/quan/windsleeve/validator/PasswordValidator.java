@@ -1,7 +1,7 @@
 package com.quan.windsleeve.validator;
 
-import com.quan.windsleeve.core.dto.PersonDTO;
 
+import com.quan.windsleeve.dto.PersonDTO;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -11,7 +11,7 @@ import javax.validation.ConstraintValidatorContext;
  * ConstraintValidator接口后面需要填写两个参数，第一个为当前类关联的注解，第二个参数为自定义
  * 注解修饰的目标类型。如果当前注解
  */
-public class PasswordValidator implements ConstraintValidator<PasswordEquals, PersonDTO> {
+public class PasswordValidator implements ConstraintValidator<PasswordEquals,PersonDTO> {
 
     private int minPw;
     private int maxPw;

@@ -1,5 +1,6 @@
 package com.quan.windsleeve.api.v1;
 
+import com.quan.windsleeve.core.annotation.ScopeLevel;
 import com.quan.windsleeve.exception.http.NotFoundException;
 import com.quan.windsleeve.model.Banner;
 import com.quan.windsleeve.service.IBannerService;
@@ -17,6 +18,7 @@ public class BannerController {
 
     @GetMapping("/name")
     @ResponseBody
+    @ScopeLevel(8)
     public Banner getBannerById(@RequestParam Long id) {
         Banner banner = bannerService.findOneById(id);
         return banner;
@@ -24,6 +26,7 @@ public class BannerController {
 
     @GetMapping("/name/{name}")
     @ResponseBody
+    @ScopeLevel
     public Banner findOneByName(@PathVariable String name) {
         Banner banner = bannerService.findOneByName(name);
         if (banner == null) {

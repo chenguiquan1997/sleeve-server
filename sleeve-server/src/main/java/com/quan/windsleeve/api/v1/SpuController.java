@@ -4,6 +4,7 @@ package com.quan.windsleeve.api.v1;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import com.quan.windsleeve.bo.PageCounter;
+import com.quan.windsleeve.core.annotation.ScopeLevel;
 import com.quan.windsleeve.exception.http.NotFoundException;
 import com.quan.windsleeve.model.Category;
 import com.quan.windsleeve.model.Spu;

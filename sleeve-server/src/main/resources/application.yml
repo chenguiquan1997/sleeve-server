@@ -12,3 +12,9 @@ spring:
 
 sleeve:
   api-package: com.quan.windsleeve.api
+
+
+wx:
+  appid: wxf4c62aceb256b1c5
+  appsecret: ce85139630012868436de37601ede074
+  auth_url: https://api.weixin.qq.com/sns/jscode2session?grant_type=authorization_code&

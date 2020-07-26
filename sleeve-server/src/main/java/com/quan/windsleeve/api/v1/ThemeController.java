@@ -38,6 +38,11 @@ public class ThemeController {
         return themeVO;
     }
 
+    /**
+     * 根据一组主题 name，查询一组Theme
+     * @param names
+     * @return List<ThemeVO>
+     */
     @GetMapping("/by/names")
     public List<ThemeVO> getThemeListByNames(@RequestParam String names) {
         //将names按照逗号进行拆分
@@ -55,6 +60,7 @@ public class ThemeController {
 
     @GetMapping("/name/{name}/with_spu")
     public Theme getThemeAndSpuByName(@PathVariable String name) {
+
         return themeService.findOneByName(name);
     }
 }

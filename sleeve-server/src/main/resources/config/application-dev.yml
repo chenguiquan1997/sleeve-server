@@ -11,3 +11,9 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+
+missyou:
+  security:
+    jwt-sign: chenguiquansleeveserver
+    expire-time: 60
+    api-scope: 4

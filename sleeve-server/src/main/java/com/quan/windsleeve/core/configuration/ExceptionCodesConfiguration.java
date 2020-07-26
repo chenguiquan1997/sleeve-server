@@ -14,6 +14,9 @@ import java.util.Map;
 @Component
 public class ExceptionCodesConfiguration {
 
+    /**
+     * 当前的codes变量名，需要与配置文件中的sleeve.后面的变量名一致
+     */
     private Map<Integer,String> codes = new HashMap<>();
 
     /**
