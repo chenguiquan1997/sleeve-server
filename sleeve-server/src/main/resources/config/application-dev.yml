@@ -15,5 +15,5 @@ spring:
 missyou:
   security:
     jwt-sign: chenguiquansleeveserver
-    expire-time: 60
+    expire-time: 600
     api-scope: 4

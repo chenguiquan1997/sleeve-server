@@ -6,6 +6,8 @@ import com.quan.windsleeve.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements IUserService {
 
@@ -17,7 +19,6 @@ public class UserServiceImpl implements IUserService {
      * @param openid
      * @return
      */
-
     @Override
     public User findUserByOpenid(String openid) {
         if(openid == null || openid == "") {
@@ -25,5 +26,11 @@ public class UserServiceImpl implements IUserService {
         }
         User user = userRepository.findByOpenid(openid);
         return user;
+    }
+
+    @Override
+    public Optional<User> findUserById(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        return userOptional;
     }
 }

@@ -3,7 +3,12 @@ package com.quan.windsleeve.core.interceptor;
 import com.auth0.jwt.interfaces.Claim;
 import com.quan.windsleeve.core.annotation.ScopeLevel;
 import com.quan.windsleeve.exception.http.NoAuthorizationException;
+import com.quan.windsleeve.model.User;
+import com.quan.windsleeve.service.IUserService;
 import com.quan.windsleeve.util.JwtToken;
+import com.quan.windsleeve.util.LocalUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -15,6 +20,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
+
+    @Autowired
+    private IUserService userService;
+
     /**
      *
      * @param request
@@ -32,14 +41,22 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
         if(!scopeLevel.isPresent()) {
             return true;
         }
+
         //从request中获取token
         String token = getTokenFromHeader(request);
         System.out.println("从header中获取到的token: "+token);
         //验证token
         Map<String,Claim> claimMap = JwtToken.getClaimByVerify(token);
+        //从 Claim 中获取 scope 和 userId
         Claim scopeClaim = claimMap.get("scope");
+        Claim userClaim = claimMap.get("userId");
+
         Integer tokenLevel = scopeClaim.asInt();
-        System.out.println("当前token的scope: "+tokenLevel);
+        Long userId = userClaim.asLong();
+//        System.out.println("当前token的scope: "+tokenLevel);
+//        System.out.println("token中的userId: "+userId);
+        //加入到threadLocal中
+        setScopeAndUserToThreadLocal(tokenLevel,userId);
         //验证当前token是否有权限访问api
         Boolean isPermission = isTokenPermission(tokenLevel,scopeLevel.get());
         //验证当前token是否过期
@@ -52,6 +69,20 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
         return false;
     }
 
+    /**
+     * 将当前用户 访问 api 的 scope 权限，和 UserId 存储到 当前线程的 ThreadLocal 中
+     * @param tokenLevel
+     * @param userId
+     */
+    private void setScopeAndUserToThreadLocal(Integer tokenLevel, Long userId) {
+        Optional<User> user = userService.findUserById(userId);
+        User u = user.get();
+        System.out.println(u.getOpenid());
+        if(user.isPresent()) {
+            LocalUser.setUser(user.get(),tokenLevel);
+        }
+    }
+
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         super.postHandle(request, response, handler, modelAndView);
@@ -60,6 +91,8 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         super.afterCompletion(request, response, handler, ex);
+        //当前线程执行完任务以后，需要销毁掉内部的user信息
+        LocalUser.clear();
     }
 
     /**
