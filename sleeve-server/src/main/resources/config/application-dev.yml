@@ -17,3 +17,5 @@ missyou:
     jwt-sign: chenguiquansleeveserver
     expire-time: 600
     api-scope: 4
+  order:
+    pay-limit-time: 15

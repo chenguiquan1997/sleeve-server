@@ -66,6 +66,11 @@ public class CouponController {
         return "领取成功";
     }
 
+    /**
+     * 根据优惠券状态，获取我的优惠券
+     * @param status
+     * @return
+     */
     @GetMapping("/myself/by/status/{status}")
     @ScopeLevel
     public List<CouponVO> getMyCouponByStatus(@PathVariable("status") Integer status) {

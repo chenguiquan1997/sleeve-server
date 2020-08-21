@@ -1,5 +1,6 @@
 package com.quan.windsleeve.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,8 +11,11 @@ import lombok.Setter;
 @Getter
 public class Spec {
 
-    private String keyId;
-    private Integer key;
-    private String valueId;
-    private Integer value;
+    @JsonProperty("key_id")
+    private Integer keyId;
+    private String key;
+
+    @JsonProperty("value_id")
+    private Integer valueId;
+    private String value;
 }

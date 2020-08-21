@@ -32,6 +32,7 @@ public class SpuController {
     private ISpuService spuService;
 
     /**
+     * 获取当前Spu商品详情，携带sku详情数据
      * @Positive 注解可以校验参数的正负性，如果是负数，那么会抛出异常
      * @param id
      * @return

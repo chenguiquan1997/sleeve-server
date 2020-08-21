@@ -1,4 +1,4 @@
-package com.quan.windsleeve.core.dto;
+package com.quan.windsleeve.dto;
 
 import lombok.Getter;
 import lombok.Setter;

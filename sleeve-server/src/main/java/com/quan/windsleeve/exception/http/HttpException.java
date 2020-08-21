@@ -5,6 +5,7 @@ package com.quan.windsleeve.exception.http;
  */
 public class HttpException extends RuntimeException {
 
+
     private Integer code;
 
     private Integer httpStatusCode;
@@ -24,4 +25,10 @@ public class HttpException extends RuntimeException {
     public void setHttpStatusCode(Integer httpStatusCode) {
         this.httpStatusCode = httpStatusCode;
     }
+
+    public HttpException(String message) {
+        super(message);
+    }
+
+    public HttpException() {}
 }

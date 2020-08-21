@@ -1,4 +1,4 @@
-package com.quan.windsleeve.core.dto;
+package com.quan.windsleeve.dto;
 
 import com.quan.windsleeve.validator.PasswordEquals;
 import lombok.*;

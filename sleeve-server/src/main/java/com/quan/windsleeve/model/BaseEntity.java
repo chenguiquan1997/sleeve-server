@@ -3,6 +3,7 @@ package com.quan.windsleeve.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
@@ -14,9 +15,13 @@ public abstract class BaseEntity {
 
     //添加完该注解后，表示在进行序列化时，不会将当前字段序列化
     @JsonIgnore
+    @Column(insertable=false, updatable=false)
     private Date createTime;
+
     @JsonIgnore
+    @Column(insertable=false, updatable=false)
     private Date updateTime;
+
     @JsonIgnore
     private Date deleteTime;
 }

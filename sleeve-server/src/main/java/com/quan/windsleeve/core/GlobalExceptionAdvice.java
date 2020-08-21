@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
-//@ControllerAdvice//声明当前类是全局异常处理类
+@ControllerAdvice//声明当前类是全局异常处理类
 public class GlobalExceptionAdvice {
 
     @Autowired

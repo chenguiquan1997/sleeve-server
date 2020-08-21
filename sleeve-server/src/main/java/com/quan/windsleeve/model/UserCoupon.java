@@ -21,7 +21,7 @@ public class UserCoupon {
     private Long couponId;
     private Integer status;
     private Date createTime;
-    private Integer orderId;
+    private Long orderId;
     //private Date updateTime;
 
 }
