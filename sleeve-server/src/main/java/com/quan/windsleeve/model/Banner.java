@@ -23,5 +23,5 @@ public class Banner extends BaseEntity{
     //定义当前获取关联数据的方式为懒加载
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "bannerId")
-    private List<BannerItem> bannerItems;
+    private List<BannerItem> items;
 }

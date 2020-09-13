@@ -18,7 +18,7 @@ public class BannerController {
 
     @GetMapping("/name")
     @ResponseBody
-    @ScopeLevel(8)
+   // @ScopeLevel(8)
     public Banner getBannerById(@RequestParam Long id) {
         Banner banner = bannerService.findOneById(id);
         return banner;
@@ -26,7 +26,7 @@ public class BannerController {
 
     @GetMapping("/name/{name}")
     @ResponseBody
-    @ScopeLevel
+    //@ScopeLevel
     public Banner findOneByName(@PathVariable String name) {
         Banner banner = bannerService.findOneByName(name);
         if (banner == null) {

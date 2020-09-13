@@ -7,6 +7,8 @@ import com.quan.windsleeve.model.User;
 import com.quan.windsleeve.service.IUserService;
 import com.quan.windsleeve.util.JwtToken;
 import com.quan.windsleeve.util.LocalUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -20,6 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
+
+    private final Logger log = LoggerFactory.getLogger(JwtTokenInterceptor.class);
 
     @Autowired
     private IUserService userService;
@@ -105,6 +109,7 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
         if(currentTime <= expireTime) {
             return true;
         }
+        log.error("当前token已过期，请重新获取");
         throw new NoAuthorizationException(10003);
     }
 

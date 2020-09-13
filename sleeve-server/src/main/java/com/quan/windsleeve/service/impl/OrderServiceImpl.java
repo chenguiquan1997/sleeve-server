@@ -1,26 +1,26 @@
 package com.quan.windsleeve.service.impl;
 
 import com.quan.windsleeve.bo.OrderSkuBO;
+import com.quan.windsleeve.bo.PageCounter;
 import com.quan.windsleeve.core.configuration.OrderCheckerConfiguration;
 import com.quan.windsleeve.core.enums.OrderStatus;
 import com.quan.windsleeve.dto.OrderDTO;
 import com.quan.windsleeve.dto.SkuInfoDTO;
-import com.quan.windsleeve.exception.http.AttributeException;
-import com.quan.windsleeve.exception.http.CouponException;
-import com.quan.windsleeve.exception.http.ParameterException;
-import com.quan.windsleeve.exception.http.StockException;
-import com.quan.windsleeve.logic.CouponChecker;
+import com.quan.windsleeve.exception.http.*;
 import com.quan.windsleeve.logic.OrderChecker;
-import com.quan.windsleeve.model.Order;
+import com.quan.windsleeve.model.Orders;
 import com.quan.windsleeve.model.OrderSku;
 import com.quan.windsleeve.model.Sku;
-import com.quan.windsleeve.model.Spu;
 import com.quan.windsleeve.repository.*;
 import com.quan.windsleeve.service.IOrderService;
-import com.quan.windsleeve.util.CommonUtils;
 import com.quan.windsleeve.util.OrderUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +28,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class OrderServiceImpl implements IOrderService {
@@ -49,6 +51,9 @@ public class OrderServiceImpl implements IOrderService {
 
     @Autowired
     private OrderCheckerConfiguration orderCheckerConfiguration;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Value("${missyou.order.pay-limit-time}")
     private Long payLimitTime;
@@ -133,7 +138,7 @@ public class OrderServiceImpl implements IOrderService {
     public void createOrder(Long userId,OrderChecker orderChecker,OrderDTO orderDTO) {
         String orderNO = OrderUtils.getOrderNo();
         Date expireTime = OrderUtils.createOrderExpireTime(this.payLimitTime);
-        Order newOrder = Order.builder()
+        Orders newOrder = Orders.builder()
                 .userId(userId)
                 .orderNo(orderNO)
                 .finalTotalPrice(orderDTO.getFinalTotalPrice())
@@ -166,6 +171,40 @@ public class OrderServiceImpl implements IOrderService {
             cancelAfterVerificationCoupon(userId,couponId,orderId);
 
         }
+        if(couponId != null) {
+            //将数据写入redis[1]号数据库中
+            sendToRedis1(userId,orderId,couponId);
+            System.out.println("有优惠券写入成功");
+        }else {
+            sendToRedis1(userId,orderId,-1L);
+            System.out.println("无优惠券写入成功");
+        }
+
+    }
+
+
+
+    /**
+     * 向redis中发送订单数据
+     * @param userId
+     * @param orderId
+     * @param couponId
+     */
+    private void sendToRedis1(Long userId,Long orderId,Long couponId) {
+        String key = userId.toString()+":"+orderId.toString()+":"+couponId.toString();
+        String value = "sleeve";
+        try {
+            //TimeUnit指的是：payLimitTime的单位
+            stringRedisTemplate.opsForValue().set(key,value,payLimitTime, TimeUnit.SECONDS);
+        }catch (Exception e) {
+            /**
+             * 在此不应该抛出异常,因为createOrder中的所有操作，是在同一个事务中的，如果有一处出现异常
+             * 那么会导致整体用户下单操作失败，以为这是程序内部的错误，所以这是不应该的
+             * 我们可以记录日志，或者写入到预警系统
+             */
+            System.out.println("订单数据插入Redis数据库异常");
+        }
+
     }
 
     /**
@@ -199,4 +238,75 @@ public class OrderServiceImpl implements IOrderService {
             throw new CouponException(50006);
         }
     }
+
+    /**
+     * 获取待付款订单
+     * @param userId
+     * @param status
+     * @param pageCounter
+     * @return
+     */
+    @Override
+    public Page<Orders> findWaitPayOrders(Long userId, Integer status, PageCounter pageCounter) {
+        Date now = new Date();
+        Pageable pageable = PageRequest.of(pageCounter.getPageNum(),pageCounter.getPageSize(),
+                Sort.by("createTime").descending());
+        Page<Orders> orderPage = orderRepository.findWaitPayOrders(now,userId,status,pageable);
+        return orderPage;
+    }
+
+    /**
+     * 获取当前用户的所有订单
+     * @param userId
+     * @param pageCounter
+     * @return
+     */
+    @Override
+    public Page<Orders> findAllOrders(Long userId, PageCounter pageCounter) {
+        Pageable pageable = PageRequest.of(pageCounter.getPageNum(),pageCounter.getPageSize(),
+                Sort.by("createTime").descending());
+        Page<Orders> ordersPage = orderRepository.findAllByUserId(userId,pageable);
+        return ordersPage;
+    }
+
+    /**
+     * 根据状态获取相应订单
+     * @param userId
+     * @param status
+     * @param pageCounter
+     * @return
+     */
+    @Override
+    public Page<Orders> findOrdersByStatus(Long userId, Integer status, PageCounter pageCounter) {
+        Pageable pageable = PageRequest.of(pageCounter.getPageNum(),pageCounter.getPageSize());
+        Page<Orders> ordersPage = orderRepository.findByUserIdAndStatusOrderByCreateTimeDesc(userId,status,pageable);
+        return ordersPage;
+    }
+
+    /**
+     * 如果当前订单过期了，用户还没有支付，那么需要执行返还库存的操作
+     * @param key
+     */
+    @Override
+    public void returnOfInventory(String key) {
+        String[] strings = key.split(":");
+        Long userId = Long.valueOf(strings[0]);
+        Long orderId = Long.valueOf(strings[1]);
+        Long couponId = Long.valueOf(strings[2]);
+
+        if(userId != null && orderId != null && couponId != -1L) {
+            //退库存和退优惠券操作，都执行
+            Optional<Orders> optional = orderRepository.findOneByIdAndUserId(orderId,userId);
+            Orders order = optional.orElseThrow(()->new NotFoundException(50012));
+            List<OrderSku> orderSkuList = order.getSnapItems();
+
+        }
+        if(userId != null && orderId != null && couponId == -1L) {
+            //只执行退库存操作
+
+        }
+
+    }
+
+
 }

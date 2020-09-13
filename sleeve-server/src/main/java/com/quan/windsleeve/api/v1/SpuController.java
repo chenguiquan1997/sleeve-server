@@ -108,7 +108,7 @@ public class SpuController {
     /**
      * 根据 categoryId 对 spu 进行分页查询
      * @param id
-     * @param isRoot
+     * @param isRoot 是否通过root_categoryId去查询
      * @param start
      * @param count
      * @return

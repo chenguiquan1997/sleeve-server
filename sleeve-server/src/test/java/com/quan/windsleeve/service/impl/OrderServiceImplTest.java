@@ -66,5 +66,12 @@ class OrderServiceImplTest {
 
     }
 
+    @Test
+    void returnStore() {
+        String key = "123:456:-1";
+        orderService.returnOfInventory(key);
+
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.quan.windsleeve.model;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.quan.windsleeve.core.enums.OrderStatus;
 import com.quan.windsleeve.dto.OrderAddressDTO;
 import com.quan.windsleeve.util.GenericAndJson;
 import lombok.*;
@@ -16,12 +17,11 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@Table(name = "`order`")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Where(clause = "where delete_time is null")
-public class Order extends BaseEntity{
+@Where(clause = "delete_time is null")
+public class Orders extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,5 +66,21 @@ public class Order extends BaseEntity{
             return;
         }
         this.snapItems = GenericAndJson.objectToJson(orderSkuList);
+    }
+
+    /**
+     * 当用户支付当前订单时，需要对当前订单的状态、是否过期做校验
+     * @return
+     */
+    public boolean payOrderValidate() {
+        //如果当前订单的支付状态 != 待支付，就不允许支付
+       if(!this.getStatus().equals(OrderStatus.UNPAID.getCode())) {
+           return false;
+       }
+       //判断当前订单是否过期
+        if(this.getExpireTime().before(new Date())) {
+            return false;
+        }
+        return true;
     }
 }

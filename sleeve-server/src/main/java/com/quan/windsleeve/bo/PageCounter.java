@@ -6,8 +6,10 @@ import lombok.Setter;
 
 public class PageCounter {
 
-    private Integer pageSize;
+    //代表第几页
     private Integer pageNum;
+    //代表每页多少条
+    private Integer pageSize;
 
     public Integer getPageSize() {
         return pageSize;

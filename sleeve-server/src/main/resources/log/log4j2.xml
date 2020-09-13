@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <!-- name可以自定义，作用是在Loggers中AppenderRef中使用 -->
+        <!-- fileName定义输出文件名称（当前文件） -->
+        <!-- filePattern定义输出文件名称（文件满足条件后自动截断，生成历史文件） -->
+        <RollingFile name="DEBUG_ROLLING_FILE"
+                     fileName="D:\project\log\sleeve_debug.log"
+                     filePattern="D:\project\log\$${date:yyyy-MM}\app-%d{MM-dd-yyyy}-%i.log">
+            <PatternLayout>
+                <Pattern>%d [%t] %-5p [%c] - %m%n  </Pattern>
+            </PatternLayout>
+            <!-- 文件截断的条件，具体参考文档 -->
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="24"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <!-- 同一来源的Appender可以定义多个 -->
+        <RollingFile name="ERROR_ROLLING_FILE"
+                     fileName="D:\project\log\sleeve_error.log"
+                     filePattern="D:\project\log\$${date:yyyy-MM}\app-%d{MM-dd-yyyy}-%i.log">
+            <!-- 可以通过该参数来设置获取日志的权限 -->
+            <ThresholdFilter level="ERROR"/>
+            <PatternLayout>
+                <Pattern>%d [%t] %-5p [%c] - %m%n  </Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="24"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="INFO_ROLLING_FILE"
+                     fileName="D:\project\log\sleeve_info.log"
+                     filePattern="D:\project\log\$${date:yyyy-MM}\app-%d{MM-dd-yyyy}-%i.log">
+            <!-- 可以通过该参数来设置获取日志的权限 -->
+            <ThresholdFilter level="INFO"/>
+            <PatternLayout>
+                <Pattern>%d [%t] %-5p [%c] - %m%n  </Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="24"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="DEBUG_ROLLING_FILE"/>
+            <AppenderRef ref="ERROR_ROLLING_FILE"/>
+            <AppenderRef ref="INFO_ROLLING_FILE"/>
+        </Root>
+    </Loggers>
+</configuration>
+

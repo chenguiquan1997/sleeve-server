@@ -29,6 +29,7 @@ public class Spu extends BaseEntity{
     private String forThemeImg;
     private Integer categoryId;
     private Integer rootCategoryId;
+    private String tags;
 
     @OneToMany
     @JoinColumn(name = "spuId")

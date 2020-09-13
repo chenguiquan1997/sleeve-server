@@ -1,8 +1,6 @@
 package com.quan.windsleeve.repository;
 
-import com.quan.windsleeve.model.Category;
 import com.quan.windsleeve.model.Spu;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

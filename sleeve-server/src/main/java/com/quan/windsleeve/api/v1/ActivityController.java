@@ -18,6 +18,11 @@ public class ActivityController {
     @Autowired
     private ActivityServiceImpl activityService;
 
+    /**
+     * 根据活动名，获取当前活动信息数据
+     * @param name
+     * @return
+     */
     @GetMapping("/name/{name}")
     public ActivityPureVO getActivityByName(@PathVariable String name) {
 

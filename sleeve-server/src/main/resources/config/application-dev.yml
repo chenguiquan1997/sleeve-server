@@ -11,6 +11,20 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+  redis:
+    host: 192.168.118.129
+    port: 6379
+    database: 1
+    listen-pattern: '__keyevent@1__:expired'
+
+  rocketmq:
+    nameSrvAddr: 192.168.118.129
+    producer:
+      producerGroup: sleeveProducerScheduleGroup
+    consumer:
+      consumerGroup: sleeveConsumerScheduuleGroup
+
+
 
 missyou:
   security:
@@ -18,4 +32,8 @@ missyou:
     expire-time: 600
     api-scope: 4
   order:
-    pay-limit-time: 15
+    pay-limit-time: 600
+  pay:
+    notify-host: xxxxxxx
+    notify-url: /v1/payment/wx/notify
+

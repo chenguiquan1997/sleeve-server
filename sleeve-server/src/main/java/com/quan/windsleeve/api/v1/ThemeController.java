@@ -58,6 +58,11 @@ public class ThemeController {
         return themeVOList;
     }
 
+    /**
+     * 查询和当前Theme主题相关的所有Spu
+     * @param name
+     * @return
+     */
     @GetMapping("/name/{name}/with_spu")
     public Theme getThemeAndSpuByName(@PathVariable String name) {
 
