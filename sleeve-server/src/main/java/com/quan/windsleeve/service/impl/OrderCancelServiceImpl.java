@@ -1,6 +1,7 @@
 package com.quan.windsleeve.service.impl;
 
 import com.quan.windsleeve.bo.OrderCancelBO;
+import com.quan.windsleeve.core.enums.OrderStatus;
 import com.quan.windsleeve.model.OrderSku;
 import com.quan.windsleeve.model.Orders;
 import com.quan.windsleeve.repository.OrderRepository;
@@ -40,6 +41,12 @@ public class OrderCancelServiceImpl implements IOrderCancelService {
         //如果当前Optional中有值
         if(optional.isPresent()) {
             Orders order = optional.get();
+           Integer status =  order.getStatus();
+           //需要判断当前订单是否已经支付，如果未支付，那么才需要执行去除库存操作
+            if(!status.equals(OrderStatus.UNPAID.getCode())) {
+                System.out.println("当前订单不是待支付状态，无法执行去库存操作...... status = "+status);
+                return;
+            }
             List<OrderSku> orderSkuList = order.getSnapItems();
             //返还库存 操作sku表
             if(orderSkuList != null) {

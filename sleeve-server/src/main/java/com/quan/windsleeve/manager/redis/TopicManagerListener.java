@@ -13,11 +13,6 @@ public class TopicManagerListener implements MessageListener {
 
     private static ApplicationEventPublisher publisher;
 
-//    @Autowired
-//    public void setPublisher(ApplicationEventPublisher publisher) {
-//        TopicManagerListener.publisher = publisher;
-//    }
-
     @Autowired
     public void setPublisher(ApplicationEventPublisher publisher) {
         TopicManagerListener.publisher = publisher;

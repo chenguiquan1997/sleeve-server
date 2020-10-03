@@ -72,15 +72,15 @@ public class WXPaymentServiceImpl implements IWXPaymentService {
             throw new PaymentException(50010);
         }
         Map<String,String> payParamMap = assembleWXPayParam(order);
-        //调用当前方法，就可以实现订单的预支付操作
         Map<String,String> preOrderResult = null;
         try {
+            //调用当前方法，就可以实现订单的预支付操作
             preOrderResult = wxPay.unifiedOrder(payParamMap);
         } catch (Exception e) {
             e.printStackTrace();
             throw new PaymentException(50010);
         }
-
+        //校验生成预支付订单的结果
         validatePrePayResult(preOrderResult);
 
         String prepayId = preOrderResult.get("prepay_id");
@@ -158,7 +158,7 @@ public class WXPaymentServiceImpl implements IWXPaymentService {
         //订单金额
         String money = CommonUtils.yuanConvertFen(order.getFinalTotalPrice());
         unifiedDataMap.put("total_fee",money);
-        //设备ip
+        //设备ip-->用户使用的手机ip
         unifiedDataMap.put("spbill_create_ip", HttpRequestProxy.getRemoteRealIp());
         //通知地址
         unifiedDataMap.put("notify_url",notifyHost+notifyUrl);

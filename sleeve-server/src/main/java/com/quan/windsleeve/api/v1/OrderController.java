@@ -5,6 +5,7 @@ import com.quan.windsleeve.core.annotation.ScopeLevel;
 import com.quan.windsleeve.core.enums.OrderStatus;
 import com.quan.windsleeve.dto.OrderDTO;
 import com.quan.windsleeve.logic.OrderChecker;
+import com.quan.windsleeve.manager.rocketMq.ScheduleProducer;
 import com.quan.windsleeve.model.Orders;
 import com.quan.windsleeve.service.IOrderService;
 import com.quan.windsleeve.util.CommonUtils;
@@ -26,6 +27,9 @@ public class OrderController {
 
     @Autowired
     private IOrderService orderService;
+
+    @Autowired
+    private ScheduleProducer scheduleProducer;
 
     @PostMapping("/create")
     @ScopeLevel
@@ -93,6 +97,11 @@ public class OrderController {
         Page<Orders> ordersPage = orderService.findOrdersByStatus(userId,status,pageCounter);
         PagingMappering pagingMapper = new PagingMappering(ordersPage,OrderSimplifyVO.class);
         return pagingMapper;
+    }
+
+    @GetMapping("/mqtest")
+    public void mqtest(String orderKey,String orderMsg) {
+        scheduleProducer.sendMsg(orderKey,orderMsg);
     }
 
 }

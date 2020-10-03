@@ -26,6 +26,12 @@ public class PaymentController {
     @Autowired
     private IWXPaymentService wxPaymentService;
 
+    /**
+     * 服务端只负责准备小程序支付需要的一系列参数，然后返回到小程序。具体的支付操作，
+     * 是在小程序内部调用微信支付接口完成的
+     * @param orderId
+     * @return
+     */
     @PostMapping("/pay/order/{id}")
     @ScopeLevel
     public Map<String,String> preOrder(@PathVariable("id") @NotNull @Positive Long orderId) {
@@ -43,6 +49,11 @@ public class PaymentController {
         return miniPayParam;
     }
 
+    /**
+     * 小程序执行微信支付操作成功后，微信服务器调用的回调通知接口
+     * @param request
+     * @param response
+     */
     @RequestMapping("/wx/notify")
     public void wxNotify(HttpServletRequest request,
                          HttpServletResponse response) {

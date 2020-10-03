@@ -34,7 +34,7 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon,Long> {
                                       @Param("orderId") Long orderId);
 
     @Modifying
-    @Query("update UserCoupon uc set uc.status = 1 \n" +
+    @Query("update UserCoupon uc set uc.status = 1 , uc.orderId = null\n" +
             " where uc.userId = :userId and uc.orderId = :orderId\n" +
             "       and uc.couponId = :couponId and uc.status = 2")
     int revertCoupon(@Param("userId") Long userId,

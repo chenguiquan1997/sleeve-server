@@ -8,6 +8,7 @@ import com.quan.windsleeve.dto.OrderDTO;
 import com.quan.windsleeve.dto.SkuInfoDTO;
 import com.quan.windsleeve.exception.http.*;
 import com.quan.windsleeve.logic.OrderChecker;
+import com.quan.windsleeve.manager.IOrderDelayMessage;
 import com.quan.windsleeve.model.Orders;
 import com.quan.windsleeve.model.OrderSku;
 import com.quan.windsleeve.model.Sku;
@@ -53,13 +54,10 @@ public class OrderServiceImpl implements IOrderService {
     private OrderCheckerConfiguration orderCheckerConfiguration;
 
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private IOrderDelayMessage orderDelayMessage;
 
     @Value("${missyou.order.pay-limit-time}")
     private Long payLimitTime;
-
-//    @Autowired
-//    private OrderUtils orderUtils;
 
     /**
      * 当前方法用于校验订单
@@ -171,41 +169,14 @@ public class OrderServiceImpl implements IOrderService {
             cancelAfterVerificationCoupon(userId,couponId,orderId);
 
         }
-        if(couponId != null) {
-            //将数据写入redis[1]号数据库中
-            sendToRedis1(userId,orderId,couponId);
-            System.out.println("有优惠券写入成功");
-        }else {
-            sendToRedis1(userId,orderId,-1L);
-            System.out.println("无优惠券写入成功");
-        }
 
+        //将消息发送到redis或mq
+        orderDelayMessage.sendOrderDelayMessage(userId,orderId,couponId);
     }
 
 
 
-    /**
-     * 向redis中发送订单数据
-     * @param userId
-     * @param orderId
-     * @param couponId
-     */
-    private void sendToRedis1(Long userId,Long orderId,Long couponId) {
-        String key = userId.toString()+":"+orderId.toString()+":"+couponId.toString();
-        String value = "sleeve";
-        try {
-            //TimeUnit指的是：payLimitTime的单位
-            stringRedisTemplate.opsForValue().set(key,value,payLimitTime, TimeUnit.SECONDS);
-        }catch (Exception e) {
-            /**
-             * 在此不应该抛出异常,因为createOrder中的所有操作，是在同一个事务中的，如果有一处出现异常
-             * 那么会导致整体用户下单操作失败，以为这是程序内部的错误，所以这是不应该的
-             * 我们可以记录日志，或者写入到预警系统
-             */
-            System.out.println("订单数据插入Redis数据库异常");
-        }
 
-    }
 
     /**
      * 进行减库存操作，有两种方式：
