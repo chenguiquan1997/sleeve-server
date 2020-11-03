@@ -40,6 +40,10 @@ public class CouponRevertServiceImpl implements ICouponRevertService {
         System.out.println("返还优惠券方法接收到了事件通知");
         Long couponId = orderCancelBO.getCouponId();
         if((couponId != null)) {
+            if(couponId == -1) {
+                System.out.println("couponId = -1，无需返还优惠券");
+                return;
+            }
            //执行归还优惠券操作
             Long userId = orderCancelBO.getUserId();
             Long orderId = orderCancelBO.getOrderId();

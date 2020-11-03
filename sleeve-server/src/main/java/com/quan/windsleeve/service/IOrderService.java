@@ -14,7 +14,7 @@ public interface IOrderService {
      */
     public OrderChecker isOK(Long userId, OrderDTO orderDTO);
 
-    public void createOrder(Long userId,OrderChecker orderChecker,OrderDTO orderDTO);
+    public Long createOrder(Long userId,OrderChecker orderChecker,OrderDTO orderDTO);
 
     Page<Orders> findWaitPayOrders(Long userId, Integer status, PageCounter pageCounter);
 
@@ -23,6 +23,8 @@ public interface IOrderService {
     Page<Orders> findOrdersByStatus(Long userId, Integer status, PageCounter pageCounter);
 
     void returnOfInventory(String key);
+
+    void updateOrderStatusToAlreadyPay(Long orderId, Long userId);
 
 
 }

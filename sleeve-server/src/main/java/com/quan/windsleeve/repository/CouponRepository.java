@@ -23,7 +23,8 @@ public interface CouponRepository extends JpaRepository<Coupon,Long> {
             " join coupon_category cc on c.id = cc.coupon_id \n" +
             " join category ca on cc.category_id = ca.id or cc.root_category_id = ca.parent_id\n" +
             " join activity a on c.activity_id = a.id\n" +
-            " where ca.id = :categoryId and a.start_time < :now and a.end_time > :now",
+            " where ca.id = :categoryId and a.start_time < :now and a.end_time > :now\n" +
+            "       and c.start_time < :now and c.end_time > :now",
             nativeQuery = true)
     List<Coupon> findCouponListByCategotyId(@Param("categoryId") Long categoryId, @Param("now") Date now);
 

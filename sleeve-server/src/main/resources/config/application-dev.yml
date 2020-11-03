@@ -34,7 +34,7 @@ missyou:
     expire-time: 600
     api-scope: 4
   order:
-    pay-limit-time: 60
+    pay-limit-time: 300
   pay:
     notify-host: xxxxxxx
     notify-url: /v1/payment/wx/notify

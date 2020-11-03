@@ -133,7 +133,7 @@ public class OrderServiceImpl implements IOrderService {
      * @param orderDTO
      */
     @Transactional
-    public void createOrder(Long userId,OrderChecker orderChecker,OrderDTO orderDTO) {
+    public Long createOrder(Long userId,OrderChecker orderChecker,OrderDTO orderDTO) {
         String orderNO = OrderUtils.getOrderNo();
         Date expireTime = OrderUtils.createOrderExpireTime(this.payLimitTime);
         Orders newOrder = Orders.builder()
@@ -169,9 +169,9 @@ public class OrderServiceImpl implements IOrderService {
             cancelAfterVerificationCoupon(userId,couponId,orderId);
 
         }
-
         //将消息发送到redis或mq
         orderDelayMessage.sendOrderDelayMessage(userId,orderId,couponId);
+        return orderId;
     }
 
 
@@ -270,13 +270,22 @@ public class OrderServiceImpl implements IOrderService {
             Optional<Orders> optional = orderRepository.findOneByIdAndUserId(orderId,userId);
             Orders order = optional.orElseThrow(()->new NotFoundException(50012));
             List<OrderSku> orderSkuList = order.getSnapItems();
-
         }
-        if(userId != null && orderId != null && couponId == -1L) {
-            //只执行退库存操作
+    }
 
+    /**
+     * 将订单状态从“未支付”-->“已支付”
+     * @param orderId
+     * @param userId
+     */
+    @Override
+    @Transactional
+    public void updateOrderStatusToAlreadyPay(Long orderId, Long userId) {
+        int result = orderRepository.updateOrderStatusToAlreadyPay(orderId,userId);
+        if(result != 1) {
+            //todo 表示修改订单状态失败，应该记录到一张专门的表中，后续进行修改
+            System.out.println("当前订单状态修改失败，orderId="+orderId);
         }
-
     }
 
 

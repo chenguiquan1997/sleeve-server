@@ -5,6 +5,7 @@ import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import com.quan.windsleeve.bo.PageCounter;
 import com.quan.windsleeve.core.annotation.ScopeLevel;
+import com.quan.windsleeve.exception.http.NoAuthorizationException;
 import com.quan.windsleeve.exception.http.NotFoundException;
 import com.quan.windsleeve.model.Category;
 import com.quan.windsleeve.model.Spu;
@@ -46,6 +47,11 @@ public class SpuController {
         return spuDetail;
     }
 
+    /**
+     * 根据spuid,获取简单的spu详情数据
+     * @param id spuid
+     * @return
+     */
     @GetMapping("id/{id}/detail/vo")
     public SpuSimplifyVO getSpuByVO(@PathVariable @Positive Long id) {
         Spu spu = spuService.findSpuDetailById(id);

@@ -1,5 +1,6 @@
 package com.quan.windsleeve.api.v1;
 
+import com.quan.windsleeve.core.UnifyResponse;
 import com.quan.windsleeve.core.annotation.ScopeLevel;
 import com.quan.windsleeve.core.enums.CouponStatus;
 import com.quan.windsleeve.exception.http.NotFoundException;
@@ -13,6 +14,7 @@ import com.quan.windsleeve.vo.CouponVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,11 +61,11 @@ public class CouponController {
     @PostMapping("/collect/{id}")
     @ResponseBody
     @ScopeLevel
-    public String collectCoupon(@PathVariable("id") Long couponId) {
+    public void collectCoupon(@PathVariable("id") Long couponId) {
         User userInfo = LocalUser.getUser();
         Long userId = userInfo.getId();
         couponService.collectCoupon(userId,couponId);
-        return "领取成功";
+        UnifyResponse.success(90008);
     }
 
     /**
@@ -97,19 +99,26 @@ public class CouponController {
         return couponVoList;
     }
 
-//    @GetMapping("/myself/available/with_category")
-//    @ScopeLevel
-//    public  List<Map<String,Object>> getMyCouponWithCategory() {
-//        User user = LocalUser.getUser();
-//        Long userId = user.getId();
-//        System.out.println("输出userId: "+userId);
-//        if(userId == null) {
-//            throw new ParamNullException(70001);
-//        }
-//        List<Map<String,Object>> categories = couponService.findMyAvailableCouponWithCategory(userId);
-//        return categories;
-//    }
+    /*
+    @GetMapping("/myself/available/with_category")
+    @ScopeLevel
+    public  List<Map<String,Object>> getMyCouponWithCategory() {
+        User user = LocalUser.getUser();
+        Long userId = user.getId();
+        System.out.println("输出userId: "+userId);
+        if(userId == null) {
+            throw new ParamNullException(70001);
+        }
+        List<Map<String,Object>> categories = couponService.findMyAvailableCouponWithCategory(userId);
+        return categories;
+    }
+    */
 
+    /**
+     * 获取我可用的优惠券(带分类数据)
+     * 此接口用于下单时检验用户的优惠券是否可以使用，所以需要携带分类数据
+     * @return
+     */
     @GetMapping("/myself/available/with_category")
     @ScopeLevel
     public  List<CouponCategoryVO> getMyCouponWithCategory() {
@@ -123,4 +132,5 @@ public class CouponController {
         List<CouponCategoryVO> couponCategoryVOS = CouponCategoryVO.forEachCoupon(couponList);
         return couponCategoryVOS;
     }
+
 }

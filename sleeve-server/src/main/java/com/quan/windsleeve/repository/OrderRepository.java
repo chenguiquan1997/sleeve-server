@@ -87,5 +87,14 @@ public interface OrderRepository extends JpaRepository<Orders,Long> {
             " where o.status = 1 and o.id = :orderId and o.userId = :userId")
     int updateOrderStatus(@Param("orderId") Long orderId, @Param("userId") Long userId);
 
-
+    /**
+     * 将订单的状态从"待支付"-->"已支付"
+     * @param orderId
+     * @param userId
+     * @return
+     */
+    @Modifying
+    @Query("update Orders o set o.status = 2 \n" +
+            " where o.status = 1 and o.id = :orderId and o.userId = :userId")
+    int updateOrderStatusToAlreadyPay(@Param("orderId") Long orderId, @Param("userId") Long userId);
 }

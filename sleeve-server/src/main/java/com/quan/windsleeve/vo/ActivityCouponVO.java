@@ -35,5 +35,6 @@ public class ActivityCouponVO {
 
     public ActivityCouponVO(Activity activity) {
         BeanUtils.copyProperties(activity,this);
+
     }
 }

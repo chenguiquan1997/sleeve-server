@@ -37,7 +37,16 @@ public class CouponServiceImpl implements ICouponService {
     @Override
     public List<Coupon> findCouponListByCategotyId(Long categoryId) {
         Date nowDate = new Date();
-        return couponRepository.findCouponListByCategotyId(categoryId,nowDate);
+        List<Coupon> coupons = couponRepository.findCouponListByCategotyId(categoryId,nowDate);
+        List<Coupon> newCoupons = new ArrayList<>();
+        List<Long> ids = new ArrayList<>();
+        for(Coupon c : coupons) {
+           if(!ids.contains(c.getId())) {
+               ids.add(c.getId());
+               newCoupons.add(c);
+           }
+        }
+        return newCoupons;
     }
 
     /**

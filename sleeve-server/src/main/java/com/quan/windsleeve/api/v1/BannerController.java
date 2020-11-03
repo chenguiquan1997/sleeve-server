@@ -16,14 +16,23 @@ public class BannerController {
     @Autowired
     private IBannerService bannerService;
 
+    /**
+     * 根据Banner id 查询某一条Banner的信息
+     * @param id
+     * @return
+     */
     @GetMapping("/name")
     @ResponseBody
-   // @ScopeLevel(8)
     public Banner getBannerById(@RequestParam Long id) {
         Banner banner = bannerService.findOneById(id);
         return banner;
     }
 
+    /**
+     * 根据Banner name 查询某一条Banner的信息
+     * @param name
+     * @return
+     */
     @GetMapping("/name/{name}")
     @ResponseBody
     //@ScopeLevel

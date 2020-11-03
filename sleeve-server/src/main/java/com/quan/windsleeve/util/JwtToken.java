@@ -23,6 +23,7 @@ public class JwtToken {
     public void setJwtSign(String jwtSign) {
         JwtToken.jwtSign = jwtSign;
     }
+
     @Value("${missyou.security.expire-time}")
     public void setExpireTime(Long expireTime) {
         JwtToken.expireTime = expireTime;

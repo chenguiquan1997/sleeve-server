@@ -31,6 +31,10 @@ public class CategoryController {
         return categoryMap;
     }
 
+    /**
+     * 获取六宫格数据
+     * @return
+     */
     @GetMapping("/grid/all")
     public List<Category> getGridCategory() {
         return categoryService.findGridCategory();

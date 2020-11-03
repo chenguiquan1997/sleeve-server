@@ -53,6 +53,7 @@ public class WxAuthenticationService {
         String response = restTemplate.getForObject(reqUrl, String.class);
         Map<String,Object> codeSessionMap = new HashMap<>();
         try {
+            //可以将String类型转换为Map类型
             codeSessionMap = mapper.readValue(response,Map.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 @Component
-//@Primary
+@Primary
 public class DelayMsgSendToRedis implements IOrderDelayMessage {
 
     @Autowired

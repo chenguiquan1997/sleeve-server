@@ -10,6 +10,7 @@ import com.quan.windsleeve.model.Orders;
 import com.quan.windsleeve.service.IOrderService;
 import com.quan.windsleeve.util.CommonUtils;
 import com.quan.windsleeve.util.LocalUser;
+import com.quan.windsleeve.vo.CreateOrderVO;
 import com.quan.windsleeve.vo.OrderSimplifyVO;
 import com.quan.windsleeve.vo.PagingMappering;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +42,8 @@ public class OrderController {
         //校验订单
         OrderChecker orderChecker = orderService.isOK(userId,orderDTO);
         //正式创建订单
-        orderService.createOrder(userId,orderChecker,orderDTO);
-        Map<String,Object> result = new HashMap<>();
-        result.put("result","下单成功!");
-        return  result;
+        Long orderId = orderService.createOrder(userId,orderChecker,orderDTO);
+        return CreateOrderVO.placeOrderSuccess(orderId);
     }
 
     /**
@@ -56,7 +55,7 @@ public class OrderController {
     @GetMapping("/all")
     @ScopeLevel
     public PagingMappering getAllOrders(@RequestParam(defaultValue = "0") Integer start,
-                             @RequestParam(defaultValue = "3") Integer count) {
+                             @RequestParam(defaultValue = "10") Integer count) {
         Long userId = LocalUser.getUser().getId();
         PageCounter pageCounter = CommonUtils.PageCounterConvert(start, count);
         Page<Orders> ordersPage = orderService.findAllOrders(userId,pageCounter);
@@ -70,7 +69,7 @@ public class OrderController {
     @GetMapping("/status/unpaid")
     @ScopeLevel
     public PagingMappering getWaitPayOrders(@RequestParam(defaultValue = "0") Integer start,
-                                 @RequestParam(defaultValue = "3") Integer count) {
+                                 @RequestParam(defaultValue = "10") Integer count) {
         Long userId = LocalUser.getUser().getId();
         PageCounter pageCounter = CommonUtils.PageCounterConvert(start,count);
         Page<Orders> orderPage = orderService.findWaitPayOrders(userId, OrderStatus.UNPAID.getCode(),
@@ -91,7 +90,7 @@ public class OrderController {
     @Validated
     public PagingMappering getOrderByStatus(@NotNull @PathVariable("status") Integer status,
                                             @RequestParam(defaultValue = "0") Integer start,
-                                            @RequestParam(defaultValue = "3") Integer count) {
+                                            @RequestParam(defaultValue = "20") Integer count) {
         Long userId = LocalUser.getUser().getId();
         PageCounter pageCounter = CommonUtils.PageCounterConvert(start, count);
         Page<Orders> ordersPage = orderService.findOrdersByStatus(userId,status,pageCounter);
@@ -102,6 +101,17 @@ public class OrderController {
     @GetMapping("/mqtest")
     public void mqtest(String orderKey,String orderMsg) {
         scheduleProducer.sendMsg(orderKey,orderMsg);
+    }
+
+    /**
+     * 将订单的状态从"待支付"-->"已支付"
+     * @param orderId
+     */
+    @PostMapping("/update/status/alreadyPay/{orderId}")
+    @ScopeLevel
+    public void updateOrderStatusToAlreadyPay(@NotNull @PathVariable("orderId") Long orderId) {
+        Long userId = LocalUser.getUser().getId();
+        orderService.updateOrderStatusToAlreadyPay(orderId,userId);
     }
 
 }
