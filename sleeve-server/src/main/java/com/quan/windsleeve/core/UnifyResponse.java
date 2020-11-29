@@ -3,7 +3,7 @@ package com.quan.windsleeve.core;
 import com.quan.windsleeve.exception.http.response.CreateSuccess;
 
 /**
- * 发送到前端的统一相应
+ * 发送到前端的统一响应数据格式
  */
 public class UnifyResponse {
 

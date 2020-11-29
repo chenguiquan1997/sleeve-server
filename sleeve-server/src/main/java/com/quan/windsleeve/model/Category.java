@@ -23,6 +23,7 @@ public class Category extends BaseEntity{
     private Integer level;
     private Integer idx;
     private String gridImg;
+    private Boolean isGrid;
 
     //coupon 和 category 是多对多的关系
 //    @ManyToMany

@@ -70,7 +70,7 @@ class OrderServiceImplTest {
     void returnStore() {
         String key = "123:456:-1";
         orderService.returnOfInventory(key);
-
+        System.out.println("测试输出");
     }
 
 

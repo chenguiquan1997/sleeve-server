@@ -18,9 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
+/**
+ * 全局异常处理类，目的是为了向前端返回统一的异常格式
+ */
 @ControllerAdvice//声明当前类是全局异常处理类
 public class GlobalExceptionAdvice {
 
+    //注入当前类的目的是为了 异常code文件中的数据
     @Autowired
     private ExceptionCodesConfiguration codesConfiguration;
     /**
