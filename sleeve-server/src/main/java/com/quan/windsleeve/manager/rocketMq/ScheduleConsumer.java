@@ -23,7 +23,7 @@ import java.util.List;
  * 当前这个run()只能执行一次，所以消费者的初始化也可以保证只执行一次，注册完MessageListener之后，
  * 监听器会一直不断地监听是否有消息进入到mq的broker中，如果有，就会立即进行消费
  */
-@Component
+//@Component
 public class ScheduleConsumer implements CommandLineRunner {
 
     private final Logger log = LoggerFactory.getLogger(ScheduleConsumer.class);

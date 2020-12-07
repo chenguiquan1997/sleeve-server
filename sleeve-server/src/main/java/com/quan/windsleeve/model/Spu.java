@@ -30,11 +30,15 @@ public class Spu extends BaseEntity{
     private Integer categoryId;
     private Integer rootCategoryId;
     private String tags;
-
+    /**
+     * 商品详情图
+     */
     @OneToMany
     @JoinColumn(name = "spuId")
     private List<SpuDetailImg> spuDetailImgList;
-
+    /**
+     * 商品轮播图
+     */
     @OneToMany
     @JoinColumn(name = "spuId")
     private List<SpuImg> spuImgList;
