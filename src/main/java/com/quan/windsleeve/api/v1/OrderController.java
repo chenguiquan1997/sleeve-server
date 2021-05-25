@@ -29,8 +29,8 @@ public class OrderController {
     @Autowired
     private IOrderService orderService;
 
-    @Autowired
-    private ScheduleProducer scheduleProducer;
+//    @Autowired
+//    private ScheduleProducer scheduleProducer;
 
     @PostMapping("/create")
     @ScopeLevel
@@ -98,10 +98,10 @@ public class OrderController {
         return pagingMapper;
     }
 
-    @GetMapping("/mqtest")
-    public void mqtest(String orderKey,String orderMsg) {
-        scheduleProducer.sendMsg(orderKey,orderMsg);
-    }
+//    @GetMapping("/mqtest")
+//    public void mqtest(String orderKey,String orderMsg) {
+//        scheduleProducer.sendMsg(orderKey,orderMsg);
+//    }
 
     /**
      * 将订单的状态从"待支付"-->"已支付"

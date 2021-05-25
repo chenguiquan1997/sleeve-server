@@ -55,6 +55,11 @@ public class CommonUtils {
         return moneyStr;
     }
 
+    /**
+     * 校验及整理订单金额的格式
+     * @param orderDTO
+     * @return
+     */
     public static OrderDTO unifyBigdecimalFormat(OrderDTO orderDTO) {
         String totalPrice = orderDTO.getTotalPrice().toString();
         String finalTotalPrice = orderDTO.getFinalTotalPrice().toString();

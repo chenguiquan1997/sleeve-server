@@ -13,14 +13,14 @@ import java.util.List;
 /**
  * 当前类用于将发送到rocketmq失败的消息，重新发送
  */
-@Component
+//@Component
 public class HandleMqFailMsgSchedule {
 
     @Autowired
     private RocketMqRepository rocketMqRepository;
 
-    @Autowired
-    private ScheduleProducer scheduleProducer;
+//    @Autowired
+//    private ScheduleProducer scheduleProducer;
 
     /**
      * fixedRate 表示任务执行之间的时间间隔，具体是指两次任务的开始时间间隔，即第二次任务开始时，第一次任务可能还没结束。
@@ -35,11 +35,11 @@ public class HandleMqFailMsgSchedule {
             System.out.println("无发送失败消息，当前task已退出！");
             return;
         }
-        failMsgList.forEach(failMsg -> {
-            String status = scheduleProducer.sendMsg(failMsg.getKeyId(),failMsg.getMessage());
-            if(status.equals("SEND_OK") || status.equals("FLUSH_DISK_TIMEOUT") || status.equals("FLUSH_SLAVE_TIMEOUT") || status.equals("SLAVE_NOT_AVAILABLE")) {
-                rocketMqRepository.updateSendSuccessMsg(new Date(),failMsg.getKeyId());
-            }
-        });
+//        failMsgList.forEach(failMsg -> {
+//            String status = scheduleProducer.sendMsg(failMsg.getKeyId(),failMsg.getMessage());
+//            if(status.equals("SEND_OK") || status.equals("FLUSH_DISK_TIMEOUT") || status.equals("FLUSH_SLAVE_TIMEOUT") || status.equals("SLAVE_NOT_AVAILABLE")) {
+//                rocketMqRepository.updateSendSuccessMsg(new Date(),failMsg.getKeyId());
+//            }
+//        });
     }
 }

@@ -22,23 +22,76 @@ import java.util.Objects;
 @AllArgsConstructor
 @Where(clause = "delete_time is null")
 public class Orders extends BaseEntity{
-
+    /**
+     * 数据库自增主键
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    /**
+     * 订单号
+     */
     private String orderNo;
+    /**
+     * 用户 id
+     */
     private Long userId;
+    /**
+     * 订单中商品的总数量
+     */
     private Integer totalCount;
+    /**
+     * 订单应付总金额
+     */
     private BigDecimal totalPrice;
+    /**
+     * 订单实付总金额
+     */
     private BigDecimal finalTotalPrice;
+    /**
+     * 订单主图
+     */
     private String snapImg;
+    /**
+     * 订单标题-用于小程序用户端的订单信息展示
+     */
     private String snapTitle;
+    /**
+     * 商品概要标题-用于CMS端订单列表中的概要展示
+     */
+    private String summaryTitle;
+    /**
+     * 订单中的商品详情信息
+     */
     private String snapItems;
+    /**
+     * 用户收货的信息，包括地址，联系方式，收货人等
+     */
     private String snapAddress;
+    /**
+     * 微信支付时，预支付id
+     */
     private String prepayId;
+    /**
+     * 订单状态
+     */
     private Integer status;
+    /**
+     * 订单过期时间
+     */
     private Date expireTime;
+    /**
+     * 下单时间
+     */
     private Date placedTime;
+    /**
+     * 收货人
+     */
+    private String receiver;
+    /**
+     * 联系电话
+     */
+    private String phone;
 
     public List<OrderSku> getSnapItems() {
         List<OrderSku> list = GenericAndJson.jsonToObject(this.snapItems,

@@ -6,6 +6,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.quan.windsleeve.service.impl.WxAuthenticationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +18,7 @@ import java.util.Map;
 @Component
 public class JwtToken {
 
+    private static final Logger log = LoggerFactory.getLogger(JwtToken.class);
 
     private static String jwtSign;
     private static Long expireTime;
@@ -55,6 +59,7 @@ public class JwtToken {
                              .withClaim("currentTime",time.get("currentTime"))
                              .withClaim("expireTime",time.get("expireTime"))
                              .sign(jwtAlgorithm);
+        log.info("用户获取的令牌：[{}], userId=[{}], currentTime=[{}], expireTime=[{}]",jwtToken,userId,time.get("currentTime"),time.get("expireTime"));
         return jwtToken;
     }
 

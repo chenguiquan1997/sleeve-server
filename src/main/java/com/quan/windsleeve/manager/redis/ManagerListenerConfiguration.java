@@ -8,7 +8,7 @@ import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.Topic;
 
-@Configuration
+//@Configuration
 public class ManagerListenerConfiguration {
 
     @Value("${spring.redis.listen-pattern}")

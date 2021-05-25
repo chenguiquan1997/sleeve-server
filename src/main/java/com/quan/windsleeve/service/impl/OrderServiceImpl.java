@@ -53,8 +53,8 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private OrderCheckerConfiguration orderCheckerConfiguration;
 
-    @Autowired
-    private IOrderDelayMessage orderDelayMessage;
+//    @Autowired
+//    private IOrderDelayMessage orderDelayMessage;
 
     @Value("${missyou.order.pay-limit-time}")
     private Long payLimitTime;
@@ -143,10 +143,13 @@ public class OrderServiceImpl implements IOrderService {
                 .snapImg(orderChecker.getLeaderImg(orderChecker.getServerSkuList()))
                 .snapTitle(orderChecker.getLeaderTitle(orderChecker.getServerSkuList()))
                 .status(OrderStatus.UNPAID.getCode())
+                .receiver(orderDTO.getAddress().getUserName())
+                .phone(orderDTO.getAddress().getMobile())
                 .totalPrice(orderDTO.getTotalPrice())
                 .totalCount(orderChecker.getCurrOrderTotalSkuCount(orderDTO))
                 .expireTime(expireTime)
                 .placedTime(new Date())
+                .summaryTitle(orderChecker.getSummaryTitle(orderChecker.getServerSkuList()))
                 .build();
 
         newOrder.setSnapAddress(orderDTO.getAddress());
@@ -170,7 +173,7 @@ public class OrderServiceImpl implements IOrderService {
 
         }
         //将消息发送到redis或mq
-        orderDelayMessage.sendOrderDelayMessage(userId,orderId,couponId);
+        // orderDelayMessage.sendOrderDelayMessage(userId,orderId,couponId);
         return orderId;
     }
 
