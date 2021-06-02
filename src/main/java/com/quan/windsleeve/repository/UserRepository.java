@@ -13,6 +13,4 @@ public interface UserRepository extends JpaRepository<User,Long> {
      * @return
      */
     User findByOpenid(String openid);
-
-
 }

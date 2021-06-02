@@ -80,6 +80,7 @@ public class CouponServiceImpl implements ICouponService {
         }
         Date startTime = activity.getStartTime();//活动开始时间
         Date endTime = activity.getEndTime();//活动结束时间
+        System.out.println(endTime);
         Date currTime = new Date();//当前时间
         Boolean bool = CommonUtils.judgeActivityIsValid(startTime, endTime, currTime);
         if(bool == false) {

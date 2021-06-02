@@ -38,6 +38,8 @@ public class CommonUtils {
         if(startTime == null || endTime == null || currTime == null) {
             throw new ParamNullException(70001);
         }
+        System.out.println("优惠券截止时间："+endTime.getTime());
+        System.out.println("当前时间："+currTime.getTime());
         if(currTime.getTime() >= startTime.getTime() && currTime.getTime() <= endTime.getTime()) {
             return true;
         }
