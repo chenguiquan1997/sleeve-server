@@ -90,8 +90,10 @@ public class JwtToken {
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT jwt = verifier.verify(token);
         } catch (JWTVerificationException exception){
+            System.out.println("当前token无效");
             return false;
         }
+        System.out.println("当前Token有效");
         return true;
     }
 

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -63,7 +64,7 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
         Boolean isPermission = isTokenPermission(tokenLevel,scopeLevel.get());
         // 验证当前token是否过期
         if(isPermission == true) {
-           Boolean isTokenExpire = isTokenExpire(claimMap.get("expireTime").asLong());
+           Boolean isTokenExpire = isTokenExpire(claimMap.get("expireTime").asLong(),userId);
            if(isTokenExpire == true) {
                return true;
            }
@@ -101,15 +102,13 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
      * 判断当前token是否过期
      * @param expireTime
      */
-    private Boolean isTokenExpire(Long expireTime) {
+    private Boolean isTokenExpire(Long expireTime, Long userId) {
         Long currentTime = System.currentTimeMillis();
         //如果当前时间 < 过期时间，那么认为当前token可以继续使用
-        System.out.println("expireTime "+expireTime.toString());
-        System.out.println("currentTime"+currentTime.toString());
         if(currentTime <= expireTime) {
             return true;
         }
-        log.error("当前token已过期，请重新获取");
+        log.error("当前token已过期，请重新获取, expireTime=[{}], userId=[{}]",new Date(expireTime),userId);
         throw new NoAuthorizationException(10003);
     }
 

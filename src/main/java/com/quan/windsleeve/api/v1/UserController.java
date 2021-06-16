@@ -33,7 +33,6 @@ public class UserController {
     @ScopeLevel
     public void save(@RequestBody @Validated MinUserDTO minUserDTO) {
         userService.save(minUserDTO);
-        UnifyResponse.success(00000);
     }
 
     /**
