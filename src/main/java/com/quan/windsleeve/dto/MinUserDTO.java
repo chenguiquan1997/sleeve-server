@@ -18,22 +18,32 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 public class MinUserDTO {
-
+    /**
+     * 昵称
+     */
     @NotEmpty
     private String nickName;
-
+    /**
+     * 性别
+     */
     @NotNull
     private Integer gender;
-
-    @NotEmpty
+    /**
+     * 城市，如果用户选择的country为非中国，那么city 和 province 为空
+     */
     private String city;
-
-    @NotEmpty
+    /**
+     * 省份
+     */
     private String province;
-
+    /**
+     * 国家
+     */
     @NotEmpty
     private String country;
-
+    /**
+     * 头像
+     */
     @NotEmpty
     private String avatarUrl;
 }

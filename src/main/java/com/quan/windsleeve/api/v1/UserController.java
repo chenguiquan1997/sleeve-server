@@ -1,6 +1,7 @@
 package com.quan.windsleeve.api.v1;
 
 import com.quan.windsleeve.core.UnifyResponse;
+import com.quan.windsleeve.core.annotation.ScopeLevel;
 import com.quan.windsleeve.dto.MinUserDTO;
 import com.quan.windsleeve.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class UserController {
      * @Date: 2021/5/31
      */
     @PostMapping("/save")
+    @ScopeLevel
     public void save(@RequestBody @Validated MinUserDTO minUserDTO) {
         userService.save(minUserDTO);
         UnifyResponse.success(00000);

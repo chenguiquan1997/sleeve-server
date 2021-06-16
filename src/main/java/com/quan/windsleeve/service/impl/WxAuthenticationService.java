@@ -2,6 +2,8 @@ package com.quan.windsleeve.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.quan.windsleeve.exception.http.GetTokenException;
+import com.quan.windsleeve.exception.http.NoOpenIdException;
 import com.quan.windsleeve.model.User;
 import com.quan.windsleeve.repository.UserRepository;
 import com.quan.windsleeve.service.IUserService;
@@ -55,7 +57,13 @@ public class WxAuthenticationService {
         String reqUrl = this.authUrl + "appid=" + this.appId + "&secret=" + this.appSecret + "&js_code=" + code;
         System.out.println(reqUrl);
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(reqUrl, String.class);
+        String response = "";
+        try {
+            response = restTemplate.getForObject(reqUrl, String.class);
+        }catch (Exception e) {
+            log.error("调用微信第三方wxCode2Session接口时失败",e);
+            throw new GetTokenException(10006);
+        }
         Map<String,Object> codeSessionMap = new HashMap<>();
         try {
             //可以将String类型转换为Map类型
@@ -65,7 +73,9 @@ public class WxAuthenticationService {
             e.printStackTrace();
         }
         String openid = (String) codeSessionMap.get("openid");
-        if(openid == null) return null;
+        if(openid == null) {
+            throw new NoOpenIdException(10007);
+        }
         // 查询数据库，判断当前用户有没有注册
         User userInfo = userService.findUserByOpenid(openid);
         if(userInfo == null) {

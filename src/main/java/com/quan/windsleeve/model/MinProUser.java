@@ -47,4 +47,8 @@ public class MinProUser extends BaseEntity{
      * 头像
      */
     private String avatarUrl;
+    /**
+     * 微信用户在当前系统的唯一识别标记
+     */
+    private String openId;
 }

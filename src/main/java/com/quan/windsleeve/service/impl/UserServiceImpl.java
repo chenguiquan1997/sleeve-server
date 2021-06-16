@@ -7,6 +7,7 @@ import com.quan.windsleeve.model.User;
 import com.quan.windsleeve.repository.MinUserRepository;
 import com.quan.windsleeve.repository.UserRepository;
 import com.quan.windsleeve.service.IUserService;
+import com.quan.windsleeve.util.LocalUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -72,8 +73,12 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public void save(MinUserDTO minUserDTO) {
+        String openId = LocalUser.getUser().getOpenid();
         MinProUser minUser = new MinProUser();
         BeanUtils.copyProperties(minUserDTO,minUser);
+        if(openId != null && !openId.equals("")) {
+            minUser.setOpenId(openId);
+        }
         try {
             minUserRepository.save(minUser);
         }catch (Exception e) {

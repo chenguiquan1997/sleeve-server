@@ -41,7 +41,7 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
         System.out.println("进入拦截器");
         //判断当前被访问的api是否需要权限认证
         Optional<ScopeLevel> scopeLevel = getAPIScopeLevel(handler);
-        //如果当前api不存在scopeLevel，证明它是公开的api接口
+        //如果当前api不存在@scopeLevel注解，证明它是公开的api接口
         if(!scopeLevel.isPresent()) {
             return true;
         }
@@ -57,13 +57,11 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
 
         Integer tokenLevel = scopeClaim.asInt();
         Long userId = userClaim.asLong();
-//        System.out.println("当前token的scope: "+tokenLevel);
-//        System.out.println("token中的userId: "+userId);
-        //加入到threadLocal中
+        // 加入到threadLocal中
         setScopeAndUserToThreadLocal(tokenLevel,userId);
-        //验证当前token是否有权限访问api
+        // 验证当前token是否有权限访问api
         Boolean isPermission = isTokenPermission(tokenLevel,scopeLevel.get());
-        //验证当前token是否过期
+        // 验证当前token是否过期
         if(isPermission == true) {
            Boolean isTokenExpire = isTokenExpire(claimMap.get("expireTime").asLong());
            if(isTokenExpire == true) {
@@ -74,8 +72,8 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
     }
 
     /**
-     * 将当前用户 访问 api 的 scope 权限，和 UserId 存储到 当前线程的 ThreadLocal 中
-     * @param tokenLevel
+     * 将当前用户 访问 api 的 scope 权限，和 用户数据 存储到 当前线程的 ThreadLocal 中
+     * @param tokenLevel 访问 api 的 scope 权限
      * @param userId
      */
     private void setScopeAndUserToThreadLocal(Integer tokenLevel, Long userId) {
