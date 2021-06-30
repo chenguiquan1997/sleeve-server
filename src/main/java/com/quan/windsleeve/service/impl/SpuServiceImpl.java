@@ -40,5 +40,12 @@ public class SpuServiceImpl implements ISpuService {
         return spuRepository.findByCategoryIdOrderByCreateTimeDesc(pageable,categoryId);
     }
 
+    @Override
+    public Page<Spu> findSpuListByLuenceIds(Integer pageNum, Integer pageSize, List<Long> ids) {
+        Pageable pageable = PageRequest.of(pageNum,pageSize, Sort.by("createTime").descending());
+
+        return null;
+    }
+
 
 }

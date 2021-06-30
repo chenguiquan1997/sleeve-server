@@ -65,7 +65,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     /**
-     * @Description: 根据 昵称 查询用户信息
+     * @Description: 保存小程序用户信息
      * @param minUserDTO
      * @return: null
      * @Author: Guiquan Chen

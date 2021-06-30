@@ -131,6 +131,42 @@
             <version>4.7.0</version>
         </dependency>
 
+        <!--中文分词lucene插件-->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>8.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>8.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>8.1.0</version>
+        </dependency>
+
+        <!--hanlp插件，对自然语言的拆分处理能力较好-->
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.7.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hankcs.nlp</groupId>
+            <artifactId>hanlp-lucene-plugin</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+
+        <!-- spingboot集成ehcache -->
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.10.4</version>
+        </dependency>
 
     </dependencies>
 

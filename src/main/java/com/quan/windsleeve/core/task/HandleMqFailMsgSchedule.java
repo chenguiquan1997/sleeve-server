@@ -4,6 +4,7 @@ import com.quan.windsleeve.manager.rocketMq.FailMsg;
 import com.quan.windsleeve.manager.rocketMq.RocketMqRepository;
 import com.quan.windsleeve.manager.rocketMq.ScheduleProducer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,8 @@ import java.util.List;
 /**
  * 当前类用于将发送到rocketmq失败的消息，重新发送
  */
-//@Component
+@Component
+@EnableScheduling
 public class HandleMqFailMsgSchedule {
 
     @Autowired

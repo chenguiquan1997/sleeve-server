@@ -3,15 +3,19 @@ package com.quan.windsleeve.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.quan.windsleeve.exception.http.CreateJwtException;
 import com.quan.windsleeve.service.impl.WxAuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +48,7 @@ public class JwtToken {
     }
 
     /**
-     * 创建jwtToken
+     * 创建jwt Token
      * @param scope 当前令牌可以访问接口的范围
      * @param userId 用户id
      */
@@ -53,12 +57,20 @@ public class JwtToken {
         System.out.println("secret: "+JwtToken.jwtSign);
         Algorithm jwtAlgorithm = Algorithm.HMAC256(JwtToken.jwtSign);
         Map<String,Long> time = makeJwtTokenExpireTime();
-        String jwtToken = JWT.create()
-                             .withClaim("userId",userId)
-                             .withClaim("scope",scope)
-                             .withClaim("currentTime",time.get("currentTime"))
-                             .withClaim("expireTime",time.get("expireTime"))
-                             .sign(jwtAlgorithm);
+        String jwtToken = "";
+        try {
+            jwtToken = JWT.create()
+                    .withClaim("userId",userId)
+                    .withClaim("scope",scope)
+                    //令牌过期时间
+                    .withExpiresAt(new Date(time.get("expireTime")))
+                    //签发时间
+                    .withIssuedAt(new Date(time.get("currentTime")))
+                    .sign(jwtAlgorithm);
+        }catch (JWTCreationException e) {
+            log.error("创建Token令牌失败, userId=[{}]",userId,e);
+            throw new CreateJwtException(10009);
+        }
         log.info("用户获取的令牌：[{}], userId=[{}], currentTime=[{}], expireTime=[{}]",jwtToken,userId,time.get("currentTime"),time.get("expireTime"));
         return jwtToken;
     }
@@ -73,8 +85,8 @@ public class JwtToken {
         Long expireTime = currentTime + JwtToken.expireTime * 1000;
         time.put("currentTime",currentTime);
         time.put("expireTime",expireTime);
-        System.out.println("current "+ time.get("currentTime"));
-        System.out.println("expire "+ time.get("expireTime"));
+        System.out.println("current "+ new Date(time.get("currentTime")));
+        System.out.println("expire "+ new Date(time.get("expireTime")));
         return time;
     }
 
@@ -89,32 +101,36 @@ public class JwtToken {
             //构建一个jwt的校验器
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT jwt = verifier.verify(token);
-        } catch (JWTVerificationException exception){
-            System.out.println("当前token无效");
+        } catch (TokenExpiredException e) {
+            log.info("当前token令牌已过期, token=[{}]",token,e);
+            return false;
+        } catch (JWTVerificationException e){
+            log.info("解析token令牌时发生错误, token=[{}]",token,e);
             return false;
         }
-        System.out.println("当前Token有效");
+        log.info("当前Token有效, token=[{}]",token);
         return true;
     }
 
     /**
      * 校验token，并获取一个Claim. 因为大多数情况下，我们不仅仅只需要校验token是否合法，还需要
      * 获取token中的一些信息，这些信息就是保存在Claim对象中的
-     * @param token
-     * @return
+     * @param token 令牌
+     * @return Map<String,Claim>
+     * @throws JWTVerificationException token令牌校验出错时，抛出的异常
      */
-    public static Map<String,Claim> getClaimByVerify(String token) {
+    public static Map<String,Claim> getClaimByVerify(String token) throws JWTVerificationException, TokenExpiredException {
         DecodedJWT jwtClaim;
-        try {
+//        try {
             Algorithm algorithm = Algorithm.HMAC256(JwtToken.jwtSign);
             //构建一个jwt的校验器
             JWTVerifier verifier = JWT.require(algorithm).build();
             jwtClaim = verifier.verify(token);
 
-        } catch (JWTVerificationException exception){
-            System.out.println("解析令牌发生错误");
-            return null;
-        }
+//        } catch (JWTVerificationException exception){
+//            log.error("解析token令牌时发生错误, token=[{}]",token);
+//            return null;
+//        }
         return jwtClaim.getClaims();
     }
 

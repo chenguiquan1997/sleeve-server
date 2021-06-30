@@ -79,7 +79,6 @@ public class WxAuthenticationService {
         // 查询数据库，判断当前用户有没有注册
         User userInfo = userService.findUserByOpenid(openid);
         if(userInfo == null) {
-            System.out.println("系统中没有当前用户");
             log.info("当前用户未注册, openId=[{}]",openid);
             //注册，返回jwt令牌
             User newUser = registerNewUser(openid);

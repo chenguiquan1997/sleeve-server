@@ -68,8 +68,8 @@ public class SpuController {
      * @param start 从第几位开始查询
      * @param count 每次查询的数量
      * @return
+     * latest?start=xxx&count=xx
      */
-    // /latest?start=xxx&count=xx
     @GetMapping("/latest")
     public PagingMappering getSpuPageList(@RequestParam(defaultValue = "0") Integer start,
                                 @RequestParam(defaultValue = "2") Integer count) {
