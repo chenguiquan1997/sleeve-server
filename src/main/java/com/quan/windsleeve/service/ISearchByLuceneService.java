@@ -1,5 +1,9 @@
 package com.quan.windsleeve.service;
 
+import com.quan.windsleeve.bo.LuceneIdsBO;
+import com.quan.windsleeve.model.Spu;
+import com.quan.windsleeve.vo.Paging;
+
 import java.util.List;
 
 /**
@@ -9,5 +13,11 @@ import java.util.List;
  */
 public interface ISearchByLuceneService {
 
-    List<Long>  searchSimilarProducts(String title);
+    LuceneIdsBO searchSimilarProducts(String title);
+
+    Spu cacheTest(Long id);
+
+    LuceneIdsBO getSimilarIdsFromEhcache(String text);
+
+    Paging getSpusByKey(Integer start, Integer count, String text);
 }

@@ -14,6 +14,6 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
      */
     List<Category> findByisRoot(Integer isRoot);
 
-    List<Category> findByIsRootAndIsGridAndOnline(Integer isRoot, Boolean isGrid, Boolean onLine);
+    List<Category> findByIsRootAndIsGridAndGridOnline(Integer isRoot, Boolean isGrid, Boolean onLine);
 
 }

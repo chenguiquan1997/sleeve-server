@@ -30,4 +30,11 @@ public interface ISpuService {
     Page<Spu> findSpuListByCategoryId(Integer pageNum, Integer pageSize, Integer categoryId, Boolean isRoot);
 
     Page<Spu> findSpuListByLuenceIds(Integer pageNum, Integer pageSize, List<Long> ids);
+
+    /**
+     * 根据关键字查询spu列表
+     * @param ids
+     * @return
+     */
+    List<Spu> findSpuListBykeyWord(List<Long> ids);
 }

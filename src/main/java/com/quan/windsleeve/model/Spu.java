@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -12,7 +13,7 @@ import java.util.List;
 @Setter
 //加上了@Where注解之后，所有关于Spu实体类的操作，最后在sql语句中，都会加上这一句话
 @Where(clause = "delete_time is null and online = 1")
-public class Spu extends BaseEntity{
+public class Spu extends BaseEntity implements Serializable {
     @Id
     private Long id;
     private String title;

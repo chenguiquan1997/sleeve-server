@@ -24,6 +24,10 @@ public class Category extends BaseEntity{
     private Integer idx;
     private String gridImg;
     private Boolean isGrid;
+    /**
+     * 六宫格是否上线
+     */
+    private Boolean gridOnline;
 
     //coupon 和 category 是多对多的关系
 //    @ManyToMany

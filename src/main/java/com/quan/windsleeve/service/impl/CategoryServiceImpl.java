@@ -36,6 +36,6 @@ public class CategoryServiceImpl implements ICategoryService {
      */
     @Override
     public List<Category> findGridCategory() {
-        return categoryRepository.findByIsRootAndIsGridAndOnline(1,true,true);
+        return categoryRepository.findByIsRootAndIsGridAndGridOnline(1,true,true);
     }
 }

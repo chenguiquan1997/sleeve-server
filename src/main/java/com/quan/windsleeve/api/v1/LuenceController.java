@@ -1,8 +1,15 @@
 package com.quan.windsleeve.api.v1;
 
+import com.quan.windsleeve.bo.LuceneIdsBO;
+import com.quan.windsleeve.model.Spu;
 import com.quan.windsleeve.service.ISearchByLuceneService;
 import com.quan.windsleeve.service.ISpuService;
+import com.quan.windsleeve.util.SpringContextUtils;
+import com.quan.windsleeve.vo.Paging;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,7 +20,7 @@ import java.util.List;
  * @Version 1.0
  */
 @RestController
-@RequestMapping("/luence/key")
+@RequestMapping("/lucene/key")
 public class LuenceController {
 
     @Autowired
@@ -23,8 +30,33 @@ public class LuenceController {
     private ISearchByLuceneService luceneService;
 
     @GetMapping("/spu")
-    public void getSpusByKey(@RequestParam String keyword) {
-        List<Long> ids = luceneService.searchSimilarProducts(keyword);
+    public Paging getSpusByKey(@RequestParam Integer start,
+                               @RequestParam Integer count,
+                               @RequestParam String keyword) {
+        // LuceneIdsBO ids = luceneService.searchSimilarProducts(keyword);
+
+//        LuceneIdsBO ids = luceneService.getSimilarIdsFromEhcache(keyword);
+//        EhCacheCacheManager cacheManager = (EhCacheCacheManager) SpringContextUtils
+//                .getBean("ehcache1");
+//        CacheManager cacheManager1 = cacheManager.getCacheManager();
+//        Cache cache = cacheManager1.getCache("local");
+//        List<Object> list = cache.getKeys();
+//        System.out.println(list.toString());
+//        return ids;
+        return luceneService.getSpusByKey(start,count,keyword);
 
     }
+
+//    @GetMapping("/spu")
+//    public Spu getSpusByKey(@RequestParam Long id) {
+//        EhCacheCacheManager cacheManager = (EhCacheCacheManager) SpringContextUtils
+//                .getBean("ehcache1");
+//        CacheManager cacheManager1 = cacheManager.getCacheManager();
+//        Cache cache = cacheManager1.getCache("local");
+//        List<Object> list = cache.getKeys();
+//        System.out.println(list.toString());
+//        return luceneService.cacheTest(id);
+//    }
+
+
 }
