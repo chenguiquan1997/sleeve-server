@@ -1,11 +1,11 @@
 package com.quan.windsleeve.vo;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.quan.windsleeve.model.Spu;
+import lombok.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +13,7 @@ import java.util.List;
  */
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Paging {
@@ -22,7 +23,6 @@ public class Paging {
     private Integer page;
     private Integer totalPage;
     private Boolean isLast;
-
     private List items;
 
 
@@ -33,14 +33,20 @@ public class Paging {
 
     public void initPagingParam(Page page) {
         this.total = page.getTotalElements();
-        System.out.println("total=> " + this.total);
         this.page = page.getNumber();
-        System.out.println("page=> " + this.page);
         this.count = page.getSize();
-        System.out.println("count=> " + this.count);
         this.totalPage = page.getTotalPages();
-        System.out.println("totalPage=> "+ this.totalPage);
         this.isLast = page.isLast();
     }
 
+    public static List<SpuSimplifyVO> convert(List<Spu> spuList) {
+        List<SpuSimplifyVO> spuSimplifyVOS = new ArrayList<>();
+        if(spuList == null || spuList.size() < 1) return spuSimplifyVOS;
+        spuList.forEach(spu -> {
+            SpuSimplifyVO spuSimplifyVO = new SpuSimplifyVO();
+            BeanUtils.copyProperties(spu,spuSimplifyVO);
+            spuSimplifyVOS.add(spuSimplifyVO);
+        });
+        return spuSimplifyVOS;
+    }
 }

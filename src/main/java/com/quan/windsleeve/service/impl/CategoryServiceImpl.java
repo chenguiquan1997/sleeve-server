@@ -29,8 +29,13 @@ public class CategoryServiceImpl implements ICategoryService {
         return categoryMap;
     }
 
+    /**
+     * 查询所有上线的六宫格分类数据，条件：
+     * (1)一级分类，(2)属于六宫格分类，(3)上线
+     * @return
+     */
     @Override
     public List<Category> findGridCategory() {
-        return categoryRepository.findByisRoot(1);
+        return categoryRepository.findByIsRootAndIsGridAndGridOnline(1,true,true);
     }
 }

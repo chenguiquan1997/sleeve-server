@@ -15,6 +15,8 @@ import com.quan.windsleeve.model.Sku;
 import com.quan.windsleeve.repository.*;
 import com.quan.windsleeve.service.IOrderService;
 import com.quan.windsleeve.util.OrderUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -35,6 +37,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class OrderServiceImpl implements IOrderService {
 
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
+
     @Autowired
     private OrderRepository orderRepository;
 
@@ -53,8 +57,8 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private OrderCheckerConfiguration orderCheckerConfiguration;
 
-    @Autowired
-    private IOrderDelayMessage orderDelayMessage;
+//    @Autowired
+//    private IOrderDelayMessage orderDelayMessage;
 
     @Value("${missyou.order.pay-limit-time}")
     private Long payLimitTime;
@@ -70,11 +74,13 @@ public class OrderServiceImpl implements IOrderService {
 
         //验证用户id是否为空
         if(userId == null) {
+            log.error("执行订单校验，userId 为 null，无法下单");
             throw new ParameterException(70001);
         }
 
         //验证前端传入的当前订单应付总金额，是否小于0
         if(orderDTO.getTotalPrice().compareTo(new BigDecimal(0.00)) <= 0) {
+            log.error("执行订单校验，前端传入的当前订单应付总金额，小于0，无法下单");
             throw new ParameterException(70002);
         }
 
@@ -85,6 +91,7 @@ public class OrderServiceImpl implements IOrderService {
         List<Long> skuIdList = new ArrayList<>();
         skuInfoDTOList.forEach(skuInfoDTO -> {
             if(skuInfoDTO.getId() == null) {
+                log.info("执行订单校验，前端传入的商品sku列表中，有skuId 为 null 的商品");
                 throw new AttributeException(70003);
             }
             skuIdList.add(skuInfoDTO.getId());
@@ -143,10 +150,13 @@ public class OrderServiceImpl implements IOrderService {
                 .snapImg(orderChecker.getLeaderImg(orderChecker.getServerSkuList()))
                 .snapTitle(orderChecker.getLeaderTitle(orderChecker.getServerSkuList()))
                 .status(OrderStatus.UNPAID.getCode())
+                .receiver(orderDTO.getAddress().getUserName())
+                .phone(orderDTO.getAddress().getMobile())
                 .totalPrice(orderDTO.getTotalPrice())
                 .totalCount(orderChecker.getCurrOrderTotalSkuCount(orderDTO))
                 .expireTime(expireTime)
                 .placedTime(new Date())
+                .summaryTitle(orderChecker.getSummaryTitle(orderChecker.getServerSkuList()))
                 .build();
 
         newOrder.setSnapAddress(orderDTO.getAddress());
@@ -170,13 +180,9 @@ public class OrderServiceImpl implements IOrderService {
 
         }
         //将消息发送到redis或mq
-        orderDelayMessage.sendOrderDelayMessage(userId,orderId,couponId);
+        // orderDelayMessage.sendOrderDelayMessage(userId,orderId,couponId);
         return orderId;
     }
-
-
-
-
 
     /**
      * 进行减库存操作，有两种方式：

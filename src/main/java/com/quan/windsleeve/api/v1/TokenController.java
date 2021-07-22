@@ -6,6 +6,8 @@ import com.quan.windsleeve.exception.http.NoAuthorizationException;
 import com.quan.windsleeve.service.impl.WxAuthenticationService;
 import com.quan.windsleeve.util.JwtToken;
 import jdk.nashorn.internal.parser.Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/token")
 public class TokenController {
+
+    private final Logger log = LoggerFactory.getLogger(TokenController.class);
 
     @Autowired
     private WxAuthenticationService wxAuthenticationService;
@@ -36,10 +40,11 @@ public class TokenController {
             case "0":
                 response = wxAuthenticationService.wxCode2Session(code);
                 System.out.println("生成的jwt令牌："+response);
+                log.info("当前用户通过[微信小程序]渠道获取token令牌,response=[{}]",response);
             case "1":
                 break;
             default:
-                System.out.println("没有找到");
+                log.warn("当前用户通过非正常渠道获取token令牌");
         }
         tokenMap.put("token",response);
         return tokenMap;

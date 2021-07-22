@@ -39,6 +39,9 @@ public class OrderChecker {
     //服务端查询出来的Sku 与 前端传入的Sku 整合之后的，服务于Order的类
     private List<OrderSku> orderSkuList = new ArrayList<>();
 
+    // 用于连接summaryTitle的连接符
+    private static final String contactStr = "/";
+
     /**
      * 获取当前订单中，第一个sku商品的图片，作为当前订单在前端页面显示的图片
      * @param skuList
@@ -55,6 +58,20 @@ public class OrderChecker {
      */
     public String getLeaderTitle(List<Sku> skuList) {
         return this.serverSkuList.get(0).getTitle();
+    }
+
+    /**
+     * 构建商品概要信息
+     * @param skuList
+     * @return
+     */
+    public String getSummaryTitle(List<Sku> skuList) {
+        if(skuList == null || skuList.size() < 1) return null;
+        StringBuffer summaryTitleBuff = new StringBuffer("");
+        skuList.forEach(sku -> {
+            summaryTitleBuff.append(sku.getTitle()).append(OrderChecker.contactStr);
+        });
+        return summaryTitleBuff.toString();
     }
 
     /**

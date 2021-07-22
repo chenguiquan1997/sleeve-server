@@ -11,15 +11,30 @@ public interface ISpuService {
 
     Spu findSpuDetailById(Long id);
 
+    /**
+     * 查询Home页瀑布流
+     * @param pageNum 页码
+     * @param pageSize 每页数据量
+     * @return
+     */
     Page<Spu> findSpuPageList(Integer pageNum,Integer pageSize);
 
     /**
      * 根据分类id查询 spu 数据
-     * @param pageNum
-     * @param pageSize
-     * @param categoryId
-     * @param isRoot
+     * @param pageNum 页码
+     * @param pageSize 当前页数据
+     * @param categoryId 分类id
+     * @param isRoot 是否为一级分类
      * @return
      */
     Page<Spu> findSpuListByCategoryId(Integer pageNum, Integer pageSize, Integer categoryId, Boolean isRoot);
+
+    Page<Spu> findSpuListByLuenceIds(Integer pageNum, Integer pageSize, List<Long> ids);
+
+    /**
+     * 根据关键字查询spu列表
+     * @param ids
+     * @return
+     */
+    List<Spu> findSpuListBykeyWord(List<Long> ids);
 }

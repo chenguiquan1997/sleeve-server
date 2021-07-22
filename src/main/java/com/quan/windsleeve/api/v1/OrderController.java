@@ -13,6 +13,8 @@ import com.quan.windsleeve.util.LocalUser;
 import com.quan.windsleeve.vo.CreateOrderVO;
 import com.quan.windsleeve.vo.OrderSimplifyVO;
 import com.quan.windsleeve.vo.PagingMappering;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -26,17 +28,20 @@ import java.util.Map;
 @RequestMapping("/order")
 public class OrderController {
 
+    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
+
     @Autowired
     private IOrderService orderService;
 
-    @Autowired
-    private ScheduleProducer scheduleProducer;
+//    @Autowired
+//    private ScheduleProducer scheduleProducer;
 
     @PostMapping("/create")
     @ScopeLevel
     @ResponseBody
     public Map<String,Object> createOrder(@RequestBody @Validated OrderDTO orderDTO) {
         Long userId = LocalUser.getUser().getId();
+        log.info("创建订单, userId=[{}], orderParams=[{}]",userId,orderDTO.toString());
         //统一BigDecimal格式
         orderDTO = CommonUtils.unifyBigdecimalFormat(orderDTO);
         //校验订单
@@ -98,10 +103,10 @@ public class OrderController {
         return pagingMapper;
     }
 
-    @GetMapping("/mqtest")
-    public void mqtest(String orderKey,String orderMsg) {
-        scheduleProducer.sendMsg(orderKey,orderMsg);
-    }
+//    @GetMapping("/mqtest")
+//    public void mqtest(String orderKey,String orderMsg) {
+//        scheduleProducer.sendMsg(orderKey,orderMsg);
+//    }
 
     /**
      * 将订单的状态从"待支付"-->"已支付"

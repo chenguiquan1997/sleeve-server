@@ -1,6 +1,5 @@
 package com.quan.windsleeve.service.impl;
 
-import com.quan.windsleeve.model.Category;
 import com.quan.windsleeve.model.Spu;
 import com.quan.windsleeve.repository.SpuRepository;
 import com.quan.windsleeve.service.ISpuService;
@@ -38,6 +37,23 @@ public class SpuServiceImpl implements ISpuService {
             return spuRepository.findByRootCategoryIdOrderByCreateTimeDesc(pageable,categoryId);
         }
         return spuRepository.findByCategoryIdOrderByCreateTimeDesc(pageable,categoryId);
+    }
+
+    @Override
+    public Page<Spu> findSpuListByLuenceIds(Integer pageNum, Integer pageSize, List<Long> ids) {
+        Pageable pageable = PageRequest.of(pageNum,pageSize, Sort.by("createTime").descending());
+
+        return null;
+    }
+
+    /**
+     * 根据关键字查询spu列表
+     * @param ids
+     * @return
+     */
+    @Override
+    public List<Spu> findSpuListBykeyWord(List<Long> ids) {
+        return spuRepository.findAllById(ids);
     }
 
 

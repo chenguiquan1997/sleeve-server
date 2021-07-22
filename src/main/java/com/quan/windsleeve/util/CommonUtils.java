@@ -38,6 +38,8 @@ public class CommonUtils {
         if(startTime == null || endTime == null || currTime == null) {
             throw new ParamNullException(70001);
         }
+        System.out.println("优惠券截止时间："+endTime.getTime());
+        System.out.println("当前时间："+currTime.getTime());
         if(currTime.getTime() >= startTime.getTime() && currTime.getTime() <= endTime.getTime()) {
             return true;
         }
@@ -55,6 +57,11 @@ public class CommonUtils {
         return moneyStr;
     }
 
+    /**
+     * 校验及整理订单金额的格式
+     * @param orderDTO
+     * @return
+     */
     public static OrderDTO unifyBigdecimalFormat(OrderDTO orderDTO) {
         String totalPrice = orderDTO.getTotalPrice().toString();
         String finalTotalPrice = orderDTO.getFinalTotalPrice().toString();

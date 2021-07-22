@@ -51,6 +51,20 @@
             </Policies>
         </RollingFile>
 
+        <RollingFile name="WARN_ROLLING_FILE"
+                     fileName="D:\project\log\sleeve_warn.log"
+                     filePattern="D:\project\log\$${date:yyyy-MM}\app-%d{MM-dd-yyyy}-%i.log">
+            <!-- 可以通过该参数来设置获取日志的权限 -->
+            <ThresholdFilter level="WARN"/>
+            <PatternLayout>
+                <Pattern>%d [%t] %-5p [%c] - %m%n  </Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="24"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
     </Appenders>
 
     <Loggers>
