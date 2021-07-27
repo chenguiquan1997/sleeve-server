@@ -147,6 +147,15 @@ public class SearchByLuenceImpl implements ISearchByLuceneService {
         return LuceneIdsBO.builder().ids(ids).build();
     }
 
+    /**
+     * @Description: 根据关键字分页查询相关商品
+     * @param start 查询的起始索引
+     * @param count 每页数据量
+     * @param text 关键字
+     * @return com.quan.windsleeve.vo.Paging
+     * @Author: Guiquan Chen
+     * @Date: 2021/7/10
+     */
     @Override
     public Paging getSpusByKey(Integer start, Integer count, String text) {
         LuceneIdsBO luceneIdsBO = this.getSimilarIdsFromEhcache(text);
@@ -170,16 +179,4 @@ public class SearchByLuenceImpl implements ISearchByLuceneService {
         List<SpuSimplifyVO> spuSimplifyVOS = Paging.convert(spuList);
         return new Paging(count,total.longValue(),currPage,totalPage,isLeast,spuSimplifyVOS);
     }
-
-
-
-    @Cacheable(value = CACHE_NAME,key = "#id")
-    public Spu cacheTest(Long id) {
-        System.out.println("进入spu");
-        Spu spu = new Spu();
-        spu.setId(id);
-        spu.setDescription("测试");
-        return spu;
-    }
-
 }

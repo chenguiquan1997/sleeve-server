@@ -33,18 +33,7 @@ public class LuenceController {
     public Paging getSpusByKey(@RequestParam Integer start,
                                @RequestParam Integer count,
                                @RequestParam String keyword) {
-        // LuceneIdsBO ids = luceneService.searchSimilarProducts(keyword);
-
-//        LuceneIdsBO ids = luceneService.getSimilarIdsFromEhcache(keyword);
-//        EhCacheCacheManager cacheManager = (EhCacheCacheManager) SpringContextUtils
-//                .getBean("ehcache1");
-//        CacheManager cacheManager1 = cacheManager.getCacheManager();
-//        Cache cache = cacheManager1.getCache("local");
-//        List<Object> list = cache.getKeys();
-//        System.out.println(list.toString());
-//        return ids;
         return luceneService.getSpusByKey(start,count,keyword);
-
     }
 
 //    @GetMapping("/spu")

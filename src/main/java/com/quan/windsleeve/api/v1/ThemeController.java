@@ -8,6 +8,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,7 +25,7 @@ public class ThemeController {
     private ThemeServiceImpl themeService;
 
     /**
-     * 根据name，查询单一的一组Theme数据,附带spu详情
+     * 根据name，查询单一的Theme数据
      * @param names
      * @return
      */
@@ -40,6 +42,7 @@ public class ThemeController {
 
     /**
      * 根据一组主题 name，查询一组Theme
+     * 例： localhost:8082/v1/theme/by/names?names=t-1,t-2,t-3,t-4
      * @param names
      * @return List<ThemeVO>
      */
@@ -65,7 +68,11 @@ public class ThemeController {
      */
     @GetMapping("/name/{name}/with_spu")
     public Theme getThemeAndSpuByName(@PathVariable String name) {
-
         return themeService.findOneByName(name);
+    }
+
+    @GetMapping("/getName/by/{id}")
+    public String getThemeNameById(@PathVariable @Positive @NotNull Long id) {
+        return themeService.findById(id);
     }
 }

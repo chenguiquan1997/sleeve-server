@@ -17,6 +17,13 @@ public interface ThemeRepository extends JpaRepository<Theme,Long> {
     Theme findOneByName(String name);
 
     /**
+     * 通过 id 获取某一个theme主题
+     * @param id theme id
+     * @return
+     */
+    Theme findOneById(Long id);
+
+    /**
      * 根据一组theme名称，查询一组Theme数据
      * @Query注解中的sql语句，不是标准的sql查询语句，它是操作Theme实体类的，所以当前的方法名
      * 也不需要严格按照jpa的语法规范来书写
