@@ -158,6 +158,7 @@ public class SearchByLuenceImpl implements ISearchByLuceneService {
      */
     @Override
     public Paging getSpusByKey(Integer start, Integer count, String text) {
+
         LuceneIdsBO luceneIdsBO = this.getSimilarIdsFromEhcache(text);
         if(luceneIdsBO == null || luceneIdsBO.getIds().size() < 1) return new Paging(0, (long) 0,0,0,true,new ArrayList());
         List<Long> ids = luceneIdsBO.getIds();

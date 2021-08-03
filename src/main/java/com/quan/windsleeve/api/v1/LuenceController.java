@@ -1,17 +1,16 @@
 package com.quan.windsleeve.api.v1;
 
-import com.quan.windsleeve.bo.LuceneIdsBO;
-import com.quan.windsleeve.model.Spu;
+import com.quan.windsleeve.model.HotSearch;
+import com.quan.windsleeve.service.IHotSearchService;
 import com.quan.windsleeve.service.ISearchByLuceneService;
 import com.quan.windsleeve.service.ISpuService;
-import com.quan.windsleeve.util.SpringContextUtils;
+import com.quan.windsleeve.vo.HotSearchVO;
 import com.quan.windsleeve.vo.Paging;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -28,6 +27,9 @@ public class LuenceController {
 
     @Autowired
     private ISearchByLuceneService luceneService;
+
+    @Autowired
+    private IHotSearchService hotSearchService;
 
     @GetMapping("/spu")
     public Paging getSpusByKey(@RequestParam Integer start,
@@ -47,5 +49,20 @@ public class LuenceController {
 //        return luceneService.cacheTest(id);
 //    }
 
+    /**
+     * @Description: 获取前10个最热门的搜索关键字
+     * @return java.util.List<java.lang.String>
+     * @Author: Guiquan Chen
+     * @Date: 2021/8/2
+     */
+    @GetMapping("/top10")
+    public List<String> getHotSearchTop10() {
+        return hotSearchService.getkeywordTop10();
+    }
+
+    @PostMapping("/add/hot/record")
+    public void addHotSearchRecord(@RequestParam("keyword") @NotEmpty String keyword) {
+        hotSearchService.addHotProductrecords(keyword);
+    }
 
 }
