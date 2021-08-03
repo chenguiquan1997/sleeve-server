@@ -20,6 +20,19 @@ public class ThemeServiceImpl implements IThemeService {
     }
 
     @Override
+    public Theme findOneById(Long id) {
+        return themeRepository.findOneById(id);
+    }
+
+    public String findById(Long id) {
+        Theme theme = themeRepository.findOneById(id);
+        if(theme != null) {
+            return theme.getName();
+        }
+        return "";
+    }
+
+    @Override
     public List<Theme> findThemeAndSpuGroupByNames(List<String> names) {
         return themeRepository.findThemeAndSpuGroupByNames(names);
     }

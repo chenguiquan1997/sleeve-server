@@ -15,8 +15,6 @@ public interface ISearchByLuceneService {
 
     LuceneIdsBO searchSimilarProducts(String title);
 
-    Spu cacheTest(Long id);
-
     LuceneIdsBO getSimilarIdsFromEhcache(String text);
 
     Paging getSpusByKey(Integer start, Integer count, String text);

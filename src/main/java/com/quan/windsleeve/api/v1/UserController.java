@@ -1,6 +1,5 @@
 package com.quan.windsleeve.api.v1;
 
-import com.quan.windsleeve.core.UnifyResponse;
 import com.quan.windsleeve.core.annotation.ScopeLevel;
 import com.quan.windsleeve.dto.MinUserDTO;
 import com.quan.windsleeve.service.IUserService;

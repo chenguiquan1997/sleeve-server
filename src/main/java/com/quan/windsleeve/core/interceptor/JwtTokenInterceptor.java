@@ -117,6 +117,8 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
     private Boolean isTokenExpire(Long expireTime, Long userId) {
         Long currentTime = System.currentTimeMillis();
         //如果当前时间 < 过期时间，那么认为当前token可以继续使用
+        System.out.println("expireTime "+expireTime.toString());
+        System.out.println("currentTime"+currentTime.toString());
         if(currentTime <= expireTime) {
             return true;
         }

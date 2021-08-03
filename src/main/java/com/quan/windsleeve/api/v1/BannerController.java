@@ -1,13 +1,17 @@
 package com.quan.windsleeve.api.v1;
 
+import com.quan.windsleeve.bo.BannerBO;
 import com.quan.windsleeve.core.annotation.ScopeLevel;
 import com.quan.windsleeve.exception.http.NotFoundException;
 import com.quan.windsleeve.model.Banner;
 import com.quan.windsleeve.service.IBannerService;
+import com.quan.windsleeve.vo.BannerVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("/banner")
@@ -42,5 +46,13 @@ public class BannerController {
             throw new NotFoundException(20001);
         }
         return banner;
+    }
+
+    @GetMapping("/item")
+    @ResponseBody
+    public BannerVO findBannerItem(@NotNull @Positive @RequestParam("type") Integer type,
+                                   @NotNull @Positive @RequestParam("key") Long id) {
+        BannerBO bannerBO = bannerService.findBannerItem(type,id);
+        return BannerVO.convert(bannerBO);
     }
 }
